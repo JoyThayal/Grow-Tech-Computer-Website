@@ -127,6 +127,18 @@ export default function HeroSection() {
           </button>
         ))}
       </div>
+      <div className="hidden">
+        {heroItems.map((item) => (
+          <Image
+            key={item.id}
+            src={item.img}
+            alt="preload"
+            width={450}
+            height={450}
+            priority
+          />
+        ))}
+      </div>
     </section>
   );
 }
