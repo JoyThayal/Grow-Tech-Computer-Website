@@ -90,7 +90,7 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
         }}
         className={`w-full max-w-4xl min-h-80 md:min-h-95 rounded-3xl p-6 sm:p-8 md:p-12 border flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden shadow-2xl origin-top ${item.cardBg}`}
       >
-        {/* বাম পাশ: মূল টেক্সট কনটেন্ট */}
+        {/* বাম পাশ: টেক্সট কনটেন্ট */}
         <div className="w-full md:max-w-md z-10 space-y-3 md:space-y-4">
           <span
             className={`inline-block text-[11px] md:text-xs font-bold uppercase tracking-wider px-3 md:px-3.5 py-1 md:py-1.5 rounded-full border ${item.tagStyle}`}
@@ -122,7 +122,7 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
           </div>
         </div>
 
-        {/* ডান পাশ: প্রিমিয়াম আইকন এবং ওয়াটারমার্ক নাম্বার */}
+        {/* ডান পাশ: আইকন এবং ওয়াটারমার্ক */}
         <div className="relative flex items-center justify-center mt-4 md:mt-0 self-end md:self-center">
           <span
             className={`text-[120px] sm:text-[150px] md:text-[220px] font-black select-none tracking-tighter leading-none pointer-events-none ${item.numberColor}`}
@@ -148,8 +148,8 @@ export default function HowItWorksCards() {
   });
 
   return (
-    <section className="w-full bg-[#f4f4f4] px-4 sm:px-6">
-      {/* সেকশন হেডার */}
+    <section id="how-it-works" className="w-full bg-[#f4f4f4] px-4 sm:px-6">
+      {/* হেডার */}
       <div className="text-center max-w-xl mx-auto pt-16 md:pt-24 mb-4 md:mb-6">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mt-2 md:mt-4 tracking-tight uppercase">
           How It Works
@@ -159,12 +159,15 @@ export default function HowItWorksCards() {
         </p>
       </div>
 
-      {/* কার্ড তালিকা কন্টেইনার */}
+      {/* কার্ড তালিকা */}
       <div ref={containerRef} className="relative">
         {stepsData.map((item, index) => {
           const targetScale = 1 - (stepsData.length - index) * 0.04;
-          const stepSegment = 1 / stepsData.length;
-          const start = index * stepSegment;
+
+          // আগের ৫-এর জায়গায় ৪.৪ ভাগ করা হলো (এতে কার্ড আসার পর হালকা একটু দাঁড়িয়ে থাকবে)
+          const TOTAL_SEGMENTS = 4.4;
+          const start = index / TOTAL_SEGMENTS;
+          const end = (index + 1) / TOTAL_SEGMENTS;
 
           return (
             <Card
@@ -172,11 +175,16 @@ export default function HowItWorksCards() {
               item={item}
               index={index}
               progress={scrollYProgress}
-              range={[start, 1]}
+              range={[start, Math.min(1, end)]}
               targetScale={targetScale}
             />
           );
         })}
+
+        <div
+          className="min-h-[30vh] md:min-h-[35vh] pointer-events-none"
+          aria-hidden="true"
+        />
       </div>
     </section>
   );

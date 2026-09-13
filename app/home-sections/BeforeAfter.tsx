@@ -30,11 +30,12 @@ export default function BeforeAfterSection() {
 
   return (
     <section
+      id="before-after"
       ref={containerRef}
       className="relative w-full h-[260vh] bg-[#f4f4f4] select-none z-10 transform-[translateZ(0)]"
     >
-      {/* স্টিকি ভিউপোর্ট: মোবাইলে পারফেক্ট সেন্টার ও স্পেসিং */}
-      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pt-20 pb-5 px-3 sm:px-6 md:pt-28 md:pb-8 md:px-8 overflow-hidden">
+      {/* স্টিকি ভিউপোর্ট: স্ক্রিনে পারফেক্ট সেন্টারিং ও সেফটি প্যাডিং */}
+      <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center pt-20 pb-5 px-3 sm:px-6 md:pt-24 md:pb-8 md:px-8 overflow-hidden">
         {/* ================= মিনিমাল ট্যাকটিক্যাল হেডিং ================= */}
         <div className="text-center mb-3 sm:mb-4 md:mb-5 pointer-events-none">
           <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-slate-200/80 px-2.5 sm:px-3 py-1 rounded-full mb-1.5 sm:mb-2">
@@ -48,8 +49,8 @@ export default function BeforeAfterSection() {
           </h2>
         </div>
 
-        {/* ================= ফুল রাউন্ডেড ফ্রেম কন্টেইনার: মোবাইলে 16:9 (aspect-video) এবং ডেস্কটপে md:w-[70%] flex-1 min-h-95 md:rounded-[2.5rem] ================= */}
-        <div className="relative w-full max-w-lg md:max-w-none md:w-[70%] aspect-video md:aspect-auto md:flex-1 md:min-h-95 rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden border border-slate-300/80 bg-slate-950 shadow-[0_30px_90px_rgba(0,0,0,0.2)] isolate transform-[translateZ(0)]">
+        {/* ================= ফুল রাউন্ডেড ফ্রেম কন্টেইনার: মোবাইল ও ডেস্কটপ উভয়েই ১৬:৯ (aspect-video) ================= */}
+        <div className="relative w-full max-w-lg md:max-w-5xl md:w-[70%] aspect-video rounded-2xl sm:rounded-3xl md:rounded-[2.5rem] overflow-hidden border border-slate-300/80 bg-slate-950 shadow-[0_30px_90px_rgba(0,0,0,0.2)] isolate transform-[translateZ(0)]">
           {/* ================= ১. BEFORE লেয়ার ================= */}
           <motion.div
             style={{ clipPath: beforeClipPath }}
@@ -64,13 +65,13 @@ export default function BeforeAfterSection() {
             />
 
             {/* বিফোর টপ স্ট্যাটাস */}
-            <div className="absolute top-2.5 left-2.5 sm:top-6 sm:left-6 z-20 flex items-center gap-1.5 sm:gap-2 font-mono text-[8px] sm:text-[10px] tracking-wider uppercase text-rose-200 bg-black/60 backdrop-blur-md border border-rose-500/30 px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg shadow-lg">
+            <div className="absolute top-2.5 left-2.5 sm:top-5 md:top-6 sm:left-5 md:left-6 z-20 flex items-center gap-1.5 sm:gap-2 font-mono text-[8px] sm:text-[10px] tracking-wider uppercase text-rose-200 bg-black/60 backdrop-blur-md border border-rose-500/30 px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg shadow-lg">
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e] animate-ping" />
               <span>State // Throttle</span>
             </div>
 
             {/* বিফোর বটম টেলিমেট্রি */}
-            <div className="absolute bottom-2.5 left-2.5 sm:bottom-6 sm:left-6 z-20 flex items-center divide-x divide-white/10 bg-black/70 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl">
+            <div className="absolute bottom-2.5 left-2.5 sm:bottom-5 md:bottom-6 sm:left-5 md:left-6 z-20 flex items-center divide-x divide-white/10 bg-black/70 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl">
               <div className="px-2 sm:px-4 py-1 sm:py-2.5">
                 <div className="text-[7px] sm:text-[9px] font-mono tracking-widest text-slate-400 uppercase">
                   Core Temp
@@ -104,13 +105,13 @@ export default function BeforeAfterSection() {
             />
 
             {/* আফটার টপ স্ট্যাটাস */}
-            <div className="absolute top-2.5 right-2.5 sm:top-6 sm:right-6 z-20 flex items-center gap-1.5 sm:gap-2 font-mono text-[8px] sm:text-[10px] tracking-wider uppercase text-slate-200 bg-black/50 backdrop-blur-md border border-white/10 px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg shadow-lg">
+            <div className="absolute top-2.5 right-2.5 sm:top-5 md:top-6 sm:right-5 md:right-6 z-20 flex items-center gap-1.5 sm:gap-2 font-mono text-[8px] sm:text-[10px] tracking-wider uppercase text-slate-200 bg-black/50 backdrop-blur-md border border-white/10 px-2 sm:px-3.5 py-1 sm:py-1.5 rounded-lg shadow-lg">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
               <span>State // Restored</span>
             </div>
 
             {/* আফটার বটম টেলিমেট্রি */}
-            <div className="absolute bottom-2.5 right-2.5 sm:bottom-6 sm:right-6 z-20 flex items-center divide-x divide-white/10 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl">
+            <div className="absolute bottom-2.5 right-2.5 sm:bottom-5 md:bottom-6 sm:right-5 md:right-6 z-20 flex items-center divide-x divide-white/10 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl overflow-hidden shadow-2xl">
               <div className="px-2 sm:px-4 py-1 sm:py-2.5">
                 <div className="text-[7px] sm:text-[9px] font-mono tracking-widest text-slate-400 uppercase">
                   Core Temp

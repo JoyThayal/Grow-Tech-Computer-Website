@@ -33,3 +33,7 @@ html.lenis body {
 .lenis.lenis-smooth {
   scroll-behavior: auto !important;
 }
+
+html {
+  scroll-behavior: smooth;
+}

@@ -4,116 +4,239 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, Wrench, Printer } from "lucide-react";
+
+// সার্ভিস পেজ লিংক
+const servicePages = [
+  {
+    name: "PC & Laptop Repair",
+    href: "/repair",
+    icon: Wrench,
+    desc: "Diagnostics & chip-level fixes",
+  },
+  {
+    name: "Cyber Cafe & Forms",
+    href: "/cyber-cafe",
+    icon: Printer,
+    desc: "Prints, Xerox & online cards",
+  },
+];
+
+// হোমপেজের সেকশন লিংক
+const homeSections = [
+  { name: "Overview", href: "/#services" },
+  { name: "How It Works", href: "/#how-it-works" },
+  { name: "Why Us", href: "/#why-us" },
+  { name: "Rates", href: "/#rates" },
+  { name: "Before & After", href: "/#before-after" },
+  { name: "Reviews", href: "/#testimonials" },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdown, setDropdown] = useState<string | null>(null);
 
   return (
     <header className="w-full fixed top-0 left-0 z-50 p-3 sm:p-5">
       <nav className="max-w-7xl mx-auto bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-between rounded-full px-4 sm:px-6 py-2 text-white shadow-lg">
         {/* লোগো */}
-        <Link href="/" className="flex items-center">
+        <Link href="/">
           <Image
             src="/images/logo-1.png"
             width={90}
             height={90}
             alt="Logo"
-            className="w-16 h-auto sm:w-20 md:w-22.5 object-contain"
+            className="w-16 sm:w-20 md:w-22.5 object-contain"
             priority
           />
         </Link>
 
-        {/* ডেস্কটপ মেনু (অপরিবর্তিত) */}
-        <div className="hidden md:flex items-center gap-8 text-sm font-medium">
+        {/* ডেস্কটপ মেনু */}
+        <div className="hidden md:flex items-center gap-7 text-sm font-medium">
           <Link href="/" className="hover:text-cyan-300 transition">
             Home
           </Link>
-          <Link href="/services" className="hover:text-cyan-300 transition">
-            Services
-          </Link>
+
+          {/* সার্ভিসেস ড্রপডাউন */}
+          <div
+            className="relative"
+            onMouseEnter={() => setDropdown("services")}
+            onMouseLeave={() => setDropdown(null)}
+          >
+            <button className="flex items-center gap-1 hover:text-cyan-300 transition py-2 cursor-pointer">
+              Services{" "}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${dropdown === "services" ? "rotate-180 text-cyan-300" : ""}`}
+              />
+            </button>
+            <AnimatePresence>
+              {dropdown === "services" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full -left-4 w-64 bg-slate-950/95 backdrop-blur-xl border border-white/15 rounded-2xl p-2 shadow-2xl flex flex-col gap-1"
+                >
+                  {servicePages.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-white/10 transition"
+                      >
+                        <div className="p-2 rounded-lg bg-cyan-500/10 text-cyan-400">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-white">
+                            {item.name}
+                          </div>
+                          <div className="text-[10px] text-slate-400">
+                            {item.desc}
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* এক্সপ্লোর ড্রপডাউন (সব সেকশন) */}
+          <div
+            className="relative"
+            onMouseEnter={() => setDropdown("explore")}
+            onMouseLeave={() => setDropdown(null)}
+          >
+            <button className="flex items-center gap-1 hover:text-cyan-300 transition py-2 cursor-pointer">
+              Explore{" "}
+              <ChevronDown
+                className={`w-4 h-4 transition-transform ${dropdown === "explore" ? "rotate-180 text-cyan-300" : ""}`}
+              />
+            </button>
+            <AnimatePresence>
+              {dropdown === "explore" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full -left-6 w-44 bg-slate-950/95 backdrop-blur-xl border border-white/15 rounded-2xl p-2 shadow-2xl flex flex-col gap-1 text-xs"
+                >
+                  {homeSections.map((sec) => (
+                    <Link
+                      key={sec.href}
+                      href={sec.href}
+                      className="p-2 rounded-lg hover:bg-white/10 text-slate-300 hover:text-cyan-300 transition"
+                    >
+                      {sec.name}
+                    </Link>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <Link href="/about" className="hover:text-cyan-300 transition">
             About
           </Link>
         </div>
 
-        {/* অ্যাকশন বাটন ও অ্যানিমেটেড মেনু টগল */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* কনট্যাক্ট বাটন ও মোবাইল মেনু টগল */}
+        <div className="flex items-center gap-2.5">
           <Link
             href="/contact"
-            className="bg-white text-slate-950 font-semibold px-4 sm:px-5 py-1.5 rounded-full hover:bg-cyan-100 hover:scale-105 transition shadow-md text-xs sm:text-sm"
+            className="bg-white text-slate-950 font-semibold px-4 py-1.5 rounded-full hover:bg-cyan-100 transition text-xs sm:text-sm"
           >
             Contact Us
           </Link>
 
-          {/* অ্যানিমেটেড হ্যামবার্গার থেকে "X" বাটন */}
           <button
-            type="button"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
-            className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1 rounded-full bg-white/10 hover:bg-white/20 transition cursor-pointer"
+            className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1 rounded-full bg-white/10 cursor-pointer"
           >
-            {/* উপরের লাইন */}
             <motion.span
               animate={
                 isOpen
                   ? { rotate: 45, y: 6, backgroundColor: "#22d3ee" }
-                  : { rotate: 0, y: 0, backgroundColor: "#ffffff" }
+                  : { rotate: 0, y: 0, backgroundColor: "#fff" }
               }
-              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="w-4.5 h-0.5 rounded-full block"
             />
-            {/* মাঝের লাইন */}
             <motion.span
               animate={
                 isOpen
-                  ? { opacity: 0, scaleX: 0 }
-                  : { opacity: 1, scaleX: 1, backgroundColor: "#ffffff" }
+                  ? { opacity: 0 }
+                  : { opacity: 1, backgroundColor: "#fff" }
               }
-              transition={{ duration: 0.2, ease: "easeInOut" }}
               className="w-4.5 h-0.5 rounded-full block"
             />
-            {/* নিচের লাইন */}
             <motion.span
               animate={
                 isOpen
                   ? { rotate: -45, y: -6, backgroundColor: "#22d3ee" }
-                  : { rotate: 0, y: 0, backgroundColor: "#ffffff" }
+                  : { rotate: 0, y: 0, backgroundColor: "#fff" }
               }
-              transition={{ duration: 0.3, ease: "easeInOut" }}
               className="w-4.5 h-0.5 rounded-full block"
             />
           </button>
         </div>
       </nav>
 
-      {/* মোবাইল ড্রপডাউন মেনু */}
+      {/* মোবাইল ড্রপডাউন */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -15, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -15, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="md:hidden mt-2 max-w-7xl mx-auto bg-black/60 backdrop-blur-xl border border-white/10 rounded-2xl p-4 flex flex-col gap-2.5 shadow-2xl text-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="md:hidden mt-2 bg-black/85 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 flex flex-col gap-2 max-h-[80vh] overflow-y-auto"
           >
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className="py-2 text-sm font-medium text-white hover:text-cyan-300 transition rounded-lg hover:bg-white/5"
+              className="py-1.5 px-3 text-sm font-medium hover:text-cyan-300"
             >
               Home
             </Link>
-            <Link
-              href="/services"
-              onClick={() => setIsOpen(false)}
-              className="py-2 text-sm font-medium text-white hover:text-cyan-300 transition rounded-lg hover:bg-white/5"
-            >
+
+            <div className="text-[11px] font-mono uppercase text-slate-400 px-3 pt-1">
               Services
-            </Link>
+            </div>
+            {servicePages.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsOpen(false)}
+                className="py-1.5 px-3 text-xs text-cyan-200 hover:text-cyan-300"
+              >
+                {item.name}
+              </Link>
+            ))}
+
+            <div className="text-[11px] font-mono uppercase text-slate-400 px-3 pt-2">
+              Sections
+            </div>
+            <div className="grid grid-cols-2 gap-1 px-1">
+              {homeSections.map((sec) => (
+                <Link
+                  key={sec.href}
+                  href={sec.href}
+                  onClick={() => setIsOpen(false)}
+                  className="py-1 px-2 text-xs text-slate-300 hover:text-cyan-300 rounded hover:bg-white/5"
+                >
+                  {sec.name}
+                </Link>
+              ))}
+            </div>
+
+            <div className="h-px bg-white/10 my-1" />
             <Link
               href="/about"
               onClick={() => setIsOpen(false)}
-              className="py-2 text-sm font-medium text-white hover:text-cyan-300 transition rounded-lg hover:bg-white/5"
+              className="py-1.5 px-3 text-sm hover:text-cyan-300"
             >
               About
             </Link>

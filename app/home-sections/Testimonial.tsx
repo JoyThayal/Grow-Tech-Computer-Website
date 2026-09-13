@@ -52,7 +52,7 @@ const testimonials = [
   },
   {
     id: 6,
-    name: "Debasmita Mukherjee",
+    name: "Debasish Mukherjee",
     role: "Aspirant",
     company: "Govt Exam Prep Desk",
     quote:
@@ -104,7 +104,7 @@ export default function TestimonialSection() {
   );
 
   return (
-    <section className="w-full bg-white py-16 md:py-20 px-5 sm:px-8 md:px-14 select-none transform-[translateZ(0)]">
+    <section id="testimonials" className="w-full bg-white py-16 md:py-20 px-5 sm:px-8 md:px-14 select-none transform-[translateZ(0)]">
       <div className="max-w-7xl mx-auto">
         {/* হেডার */}
         <div className="max-w-xl mb-8 md:mb-10 text-center sm:text-left">

@@ -89,6 +89,7 @@ export default function RatesRolodex() {
 
   return (
     <section
+      id="rates"
       ref={containerRef}
       className="relative w-full h-[320vh] bg-[#0d0e11] text-white select-none z-10 transform-[translateZ(0)]"
     >

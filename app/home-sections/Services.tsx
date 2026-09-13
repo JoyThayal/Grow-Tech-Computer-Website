@@ -61,7 +61,7 @@ const servicesCards = [
 
 export default function ServicesSection() {
   return (
-    <section className="w-full bg-[#f4f4f4] py-14 sm:py-16 lg:py-20 px-5 sm:px-8 lg:px-12 flex flex-col items-center justify-center">
+    <section id="services" className="w-full bg-[#f4f4f4] py-14 sm:py-16 lg:py-20 px-5 sm:px-8 lg:px-12 flex flex-col items-center justify-center">
       {/* হেডার: ডেস্কটপে তোমার আগের w-1/2 ও w-[60%] অপরিবর্তিত */}
       <div className="w-full flex flex-col justify-between items-center mb-8 sm:mb-10 lg:mb-12 text-center">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight w-full sm:w-4/5 lg:w-1/2">

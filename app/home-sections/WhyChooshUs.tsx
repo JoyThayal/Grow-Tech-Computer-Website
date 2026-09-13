@@ -49,7 +49,7 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="w-full bg-[#f4f4f4] pt-30 md:pt-0 py-16 md:py-24 px-5 sm:px-8 md:px-12 flex flex-col items-center">
+    <section id="why-us" className="w-full bg-[#f4f4f4] pt-30 md:pt-0 py-16 md:py-24 px-5 sm:px-8 md:px-12 flex flex-col items-center">
       {/* সেকশন হেডার: মোবাইলে টেক্সট স্কেলিং ও প্যাডিং নিখুঁত করা হয়েছে */}
       <div className="text-center max-w-2xl mb-10 md:mb-16">
         <span className="inline-block text-[11px] sm:text-xs font-black uppercase tracking-widest px-3.5 sm:px-4 py-1.5 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-200/60 mb-3">
