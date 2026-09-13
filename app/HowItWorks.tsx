@@ -2,7 +2,12 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
-import { Wrench, ShieldCheck, CheckCircle2 } from "lucide-react";
+import {
+  Wrench,
+  ShieldCheck,
+  CheckCircle2,
+  HeartHandshake,
+} from "lucide-react";
 
 export const stepsData = [
   {
@@ -44,6 +49,19 @@ export const stepsData = [
     tagStyle: "text-white bg-violet-950/40 border-white/20",
     dotColor: "bg-white",
   },
+  {
+    step: "04",
+    tag: "Post-Service Care",
+    title: "Warranty & Continuous Support",
+    desc: "Enjoy peace of mind with replacement warranty on installed parts and dedicated after-service support whenever your system needs fine-tuning.",
+    points: ["Component warranty support", "Direct post-repair assistance"],
+    icon: HeartHandshake,
+    cardBg:
+      "bg-[radial-gradient(circle_at_center,#fb7185,#e11d48,#9f1239)] border-rose-400/40 shadow-2xl text-white",
+    numberColor: "text-rose-200/25",
+    tagStyle: "text-white bg-rose-950/40 border-white/20",
+    dotColor: "bg-white",
+  },
 ];
 
 interface CardProps {
@@ -58,20 +76,17 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const IconComponent = item.icon;
 
-  // যখন পরবর্তী কার্ডগুলো আসবে, এই কার্ডটি পেছনের দিকে স্কেল ডাউন হবে
   const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    // h-screen এবং flex items-center কার্ডটিকে স্ক্রিনের একদম নিখুঁত সেন্টারে লক রাখে
     <div
       ref={containerRef}
-      className="min-h-[85vh] py-6 flex items-start justify-center sticky top-30"
+      className="min-h-[85vh] py-6 flex items-start justify-center sticky top-28"
     >
       <motion.div
         style={{
           scale,
-          // পরবর্তী কার্ডটি আগের কার্ডের থেকে ৩০ পিক্সেল নিচে বসবে যাতে পেছনের কার্ডের হেডার দেখা যায়
-          top: `calc(6vh + ${index * 32}px)`,
+          top: `calc(5vh + ${index * 32}px)`,
         }}
         className={`w-full max-w-4xl min-h-95 rounded-3xl p-8 md:p-12 border flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden shadow-2xl origin-top ${item.cardBg}`}
       >
@@ -105,7 +120,7 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
           </div>
         </div>
 
-        {/* ডান পাশ: প্রিমিয়াম ডার্ক আইকন এবং ওয়াটারমার্ক নাম্বার */}
+        {/* ডান পাশ: প্রিমিয়াম আইকন এবং ওয়াটারমার্ক নাম্বার */}
         <div className="relative flex items-center justify-center mt-6 md:mt-0 self-end md:self-center">
           <span
             className={`text-[160px] md:text-[220px] font-black select-none tracking-tighter leading-none pointer-events-none ${item.numberColor}`}
@@ -125,7 +140,6 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
 export default function HowItWorksCards() {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // পুরো সেকশনের স্ক্রল ট্র্যাক করা হচ্ছে
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
@@ -146,15 +160,18 @@ export default function HowItWorksCards() {
       {/* কার্ড তালিকা কন্টেইনার */}
       <div ref={containerRef} className="relative">
         {stepsData.map((item, index) => {
-          // শেষ কার্ড বাদে বাকি কার্ডগুলোর স্কেলিং রেশিও নির্ধারণ
+          // ৪টি কার্ডের জন্য স্কেল এবং স্ক্রল রেঞ্জ ক্যালকুলেশন
           const targetScale = 1 - (stepsData.length - index) * 0.04;
+          const stepSegment = 1 / stepsData.length; // প্রতি কার্ডের রেঞ্জ ০.২৫ করে
+          const start = index * stepSegment;
+
           return (
             <Card
               key={item.step}
               item={item}
               index={index}
               progress={scrollYProgress}
-              range={[index * 0.33, 1]}
+              range={[start, 1]}
               targetScale={targetScale}
             />
           );
