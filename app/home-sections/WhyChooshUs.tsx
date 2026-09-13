@@ -49,65 +49,65 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="w-full bg-[#f4f4f4] py-24 px-6 md:px-12 flex flex-col items-center">
-      {/* সেকশন হেডার */}
-      <div className="text-center max-w-2xl mb-16">
-        <span className="inline-block text-xs font-black uppercase tracking-widest px-4 py-1.5 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-200/60 mb-3">
+    <section className="w-full bg-[#f4f4f4] pt-30 md:pt-0 py-16 md:py-24 px-5 sm:px-8 md:px-12 flex flex-col items-center">
+      {/* সেকশন হেডার: মোবাইলে টেক্সট স্কেলিং ও প্যাডিং নিখুঁত করা হয়েছে */}
+      <div className="text-center max-w-2xl mb-10 md:mb-16">
+        <span className="inline-block text-[11px] sm:text-xs font-black uppercase tracking-widest px-3.5 sm:px-4 py-1.5 rounded-full bg-cyan-100 text-cyan-900 border border-cyan-200/60 mb-3">
           The Grow Tech Difference
         </span>
-        <h2 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase">
           Why Choose Us
         </h2>
-        <p className="text-slate-500 text-sm md:text-base mt-3 font-medium">
+        <p className="text-slate-500 text-xs sm:text-sm md:text-base mt-2 sm:mt-3 font-medium px-2">
           Honest diagnostics, genuine components, and prompt cyber cafe workflow
           you can rely on.
         </p>
       </div>
 
-      {/* বেন্টো গ্রিড */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-7xl">
+      {/* বেন্টো গ্রিড: ডেস্কটপে অপরিবর্তিত md:grid-cols-3 max-w-7xl */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 w-full max-w-7xl">
         {features.map((item, idx) => {
           const IconComp = item.icon;
           return (
             <div
               key={idx}
-              className={`rounded-3xl p-8 border flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:translate-y-[-4px]hover:-translate-y-1 hover:shadow-xl ${item.className}`}
+              className={`rounded-3xl p-6 sm:p-7 md:p-8 border flex flex-col justify-between relative overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${item.className}`}
             >
               <div>
-                <div className="flex items-center justify-between gap-4 mb-6">
+                <div className="flex items-center justify-between gap-4 mb-5 sm:mb-6">
                   <span
-                    className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full border ${item.tagBg}`}
+                    className={`text-[10px] sm:text-[11px] font-bold uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-full border ${item.tagBg}`}
                   >
                     {item.tagline}
                   </span>
                   <div
-                    className={`p-2.5 rounded-2xl bg-white/10 backdrop-blur-sm ${item.accent}`}
+                    className={`p-2 sm:p-2.5 rounded-2xl bg-white/10 backdrop-blur-sm ${item.accent}`}
                   >
-                    <IconComp className="w-6 h-6" />
+                    <IconComp className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                 </div>
 
-                <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-3">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold tracking-tight mb-2 sm:mb-3">
                   {item.title}
                 </h3>
-                <p className="text-sm opacity-80 leading-relaxed">
+                <p className="text-xs sm:text-sm opacity-80 leading-relaxed">
                   {item.desc}
                 </p>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-current/10 flex items-center justify-between text-xs font-semibold opacity-90">
+              <div className="pt-5 sm:pt-6 mt-5 sm:mt-6 border-t border-current/10 flex items-center justify-between text-xs font-semibold opacity-90">
                 <span>{item.highlight}</span>
-                <span className="text-base">→</span>
+                <span className="text-sm sm:text-base">→</span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* বটম ট্রাস্ট বার */}
-      <div className="mt-16 w-full max-w-5xl rounded-2xl bg-white border border-slate-200/80 p-6 md:p-8 flex flex-col sm:flex-row items-center justify-around gap-6 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-cyan-50 flex items-center justify-center text-cyan-600 font-bold">
+      {/* বটম ট্রাস্ট বার: মোবাইলে সুন্দর স্ট্যাকিং ও আইটেম অ্যালাইনমেন্ট */}
+      <div className="mt-10 md:mt-16 w-full max-w-5xl rounded-2xl bg-white border border-slate-200/80 p-5 sm:p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center justify-around gap-5 sm:gap-6 shadow-sm">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="w-10 h-10 rounded-full bg-cyan-50 shrink-0 flex items-center justify-center text-cyan-600 font-bold">
             <ShieldCheck className="w-5 h-5" />
           </div>
           <div>
@@ -122,8 +122,8 @@ export default function WhyChooseUs() {
 
         <div className="h-8 w-px bg-slate-200 hidden sm:block" />
 
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 font-bold">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="w-10 h-10 rounded-full bg-amber-50 shrink-0 flex items-center justify-center text-amber-600 font-bold">
             <Zap className="w-5 h-5" />
           </div>
           <div>
@@ -138,8 +138,8 @@ export default function WhyChooseUs() {
 
         <div className="h-8 w-px bg-slate-200 hidden sm:block" />
 
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600 font-bold">
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="w-10 h-10 rounded-full bg-emerald-50 shrink-0 flex items-center justify-center text-emerald-600 font-bold">
             <Smile className="w-5 h-5" />
           </div>
           <div>

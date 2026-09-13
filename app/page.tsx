@@ -4,7 +4,7 @@ import HowItWorks from "./home-sections/HowItWorks";
 import WhyChooshUs from "./home-sections/WhyChooshUs";
 import RatesRolodex from "./home-sections/RatesRolodex";
 import BeforeAfter from "./home-sections/BeforeAfter";
-
+import Testimonial from "./home-sections/Testimonial";
 export default function HomePage() {
   return (
     <main>
@@ -14,6 +14,7 @@ export default function HomePage() {
       <WhyChooshUs />
       <RatesRolodex />
       <BeforeAfter />
+      <Testimonial />
     </main>
   );
 }

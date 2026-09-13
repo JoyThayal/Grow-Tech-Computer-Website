@@ -81,39 +81,41 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
   return (
     <div
       ref={containerRef}
-      className="min-h-[85vh] py-6 flex items-start justify-center sticky top-28"
+      className="min-h-[75vh] md:min-h-[85vh] py-4 md:py-6 flex items-start justify-center sticky top-20 md:top-28"
     >
       <motion.div
         style={{
           scale,
-          top: `calc(5vh + ${index * 32}px)`,
+          top: `calc(4vh + ${index * 24}px)`,
         }}
-        className={`w-full max-w-4xl min-h-95 rounded-3xl p-8 md:p-12 border flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden shadow-2xl origin-top ${item.cardBg}`}
+        className={`w-full max-w-4xl min-h-80 md:min-h-95 rounded-3xl p-6 sm:p-8 md:p-12 border flex flex-col md:flex-row items-start md:items-center justify-between relative overflow-hidden shadow-2xl origin-top ${item.cardBg}`}
       >
         {/* বাম পাশ: মূল টেক্সট কনটেন্ট */}
-        <div className="max-w-md z-10 space-y-4">
+        <div className="w-full md:max-w-md z-10 space-y-3 md:space-y-4">
           <span
-            className={`inline-block text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border ${item.tagStyle}`}
+            className={`inline-block text-[11px] md:text-xs font-bold uppercase tracking-wider px-3 md:px-3.5 py-1 md:py-1.5 rounded-full border ${item.tagStyle}`}
           >
             {item.tag}
           </span>
 
-          <h3 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight">
             {item.title}
           </h3>
 
-          <p className="text-white/85 text-sm md:text-base leading-relaxed">
+          <p className="text-white/85 text-xs sm:text-sm md:text-base leading-relaxed">
             {item.desc}
           </p>
 
           {/* চেকলিস্ট পয়েন্ট */}
-          <div className="flex flex-wrap gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 pt-1 md:pt-2">
             {item.points.map((pt, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-2 text-xs font-semibold text-white/95"
+                className="flex items-center gap-2 text-[11px] sm:text-xs font-semibold text-white/95"
               >
-                <span className={`w-1.5 h-1.5 rounded-full ${item.dotColor}`} />
+                <span
+                  className={`w-1.5 h-1.5 rounded-full shrink-0 ${item.dotColor}`}
+                />
                 {pt}
               </div>
             ))}
@@ -121,15 +123,15 @@ function Card({ item, index, progress, range, targetScale }: CardProps) {
         </div>
 
         {/* ডান পাশ: প্রিমিয়াম আইকন এবং ওয়াটারমার্ক নাম্বার */}
-        <div className="relative flex items-center justify-center mt-6 md:mt-0 self-end md:self-center">
+        <div className="relative flex items-center justify-center mt-4 md:mt-0 self-end md:self-center">
           <span
-            className={`text-[160px] md:text-[220px] font-black select-none tracking-tighter leading-none pointer-events-none ${item.numberColor}`}
+            className={`text-[120px] sm:text-[150px] md:text-[220px] font-black select-none tracking-tighter leading-none pointer-events-none ${item.numberColor}`}
           >
             {item.step}
           </span>
 
-          <div className="absolute w-16 h-16 rounded-2xl bg-white/15 border border-white/25 backdrop-blur-md flex items-center justify-center text-white top-2 right-2 shadow-inner">
-            <IconComponent className="w-8 h-8" />
+          <div className="absolute w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-white/15 border border-white/25 backdrop-blur-md flex items-center justify-center text-white top-1 right-1 md:top-2 md:right-2 shadow-inner">
+            <IconComponent className="w-6 h-6 md:w-8 md:h-8" />
           </div>
         </div>
       </motion.div>
@@ -146,13 +148,13 @@ export default function HowItWorksCards() {
   });
 
   return (
-    <section className="w-full bg-[#f4f4f4] px-6">
+    <section className="w-full bg-[#f4f4f4] px-4 sm:px-6">
       {/* সেকশন হেডার */}
-      <div className="text-center max-w-xl mx-auto pt-24 mb-6">
-        <h2 className="text-5xl font-black text-slate-900 mt-4 tracking-tight uppercase">
+      <div className="text-center max-w-xl mx-auto pt-16 md:pt-24 mb-4 md:mb-6">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 mt-2 md:mt-4 tracking-tight uppercase">
           How It Works
         </h2>
-        <p className="text-slate-500 text-sm md:text-base mt-3 font-medium">
+        <p className="text-slate-500 text-xs sm:text-sm md:text-base mt-2 md:mt-3 font-medium">
           Simple Process. Clear Results.
         </p>
       </div>
@@ -160,9 +162,8 @@ export default function HowItWorksCards() {
       {/* কার্ড তালিকা কন্টেইনার */}
       <div ref={containerRef} className="relative">
         {stepsData.map((item, index) => {
-          // ৪টি কার্ডের জন্য স্কেল এবং স্ক্রল রেঞ্জ ক্যালকুলেশন
           const targetScale = 1 - (stepsData.length - index) * 0.04;
-          const stepSegment = 1 / stepsData.length; // প্রতি কার্ডের রেঞ্জ ০.২৫ করে
+          const stepSegment = 1 / stepsData.length;
           const start = index * stepSegment;
 
           return (
