@@ -86,7 +86,7 @@ export default function HeroSection() {
                   rotate: 35,
                 }}
                 transition={{
-                  duration: 0.85,
+                  duration: 0.8,
                   ease: [0.76, 0, 0.24, 1],
                 }}
                 className="absolute"

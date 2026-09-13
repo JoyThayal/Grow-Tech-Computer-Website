@@ -93,7 +93,7 @@ export default function RatesRolodex() {
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[350vh] bg-[#f4f4f4] select-none"
+      className="relative w-full h-screen bg-[#f4f4f4] select-none"
     >
       <div className="sticky top-0 h-screen w-full flex items-center justify-between px-8 md:px-20 lg:px-28 overflow-hidden">
         {/* হালকা সফট লাইট অরা (ডেপথ বাড়ানোর জন্য) */}
@@ -203,18 +203,15 @@ export default function RatesRolodex() {
           </div>
         </div>
 
-        {/* ================= ডান পাশ: নিখুঁত মাস্কিং করা ভার্টিকাল রোলিং ড্রাম ================= */}
         <div
-          className="w-[48%] h-90 relative flex items-center"
+          className="w-[48%] h-screen relative flex items-center"
           style={{
-            // এই মাস্ক প্রোপার্টিটি ওপর ও নিচের লেখাকে কোনো সাদা ছোপ ছাড়াই একদম ১০০% মাখনের মতো অদৃশ্য করে দেয়
             maskImage:
               "linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%)",
             WebkitMaskImage:
               "linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%)",
           }}
         >
-          {/* উল্লম্ব রোলিং ট্র্যাক */}
           <motion.div
             animate={{ y: -(activeIndex * 84) + 138 }}
             transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
