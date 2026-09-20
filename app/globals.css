@@ -37,3 +37,28 @@ html.lenis body {
 html {
   scroll-behavior: smooth;
 }
+
+@font-face {
+  font-family: "Druk";
+  src: url("/fonts/675222a61256656a29fff2dc_DrukText-Heavy-Web.woff2")
+    format("woff2");
+}
+
+@font-face {
+  font-family: "Garet";
+  src: url("/fonts/Garet-Book.woff2") format("woff2");
+}
+
+.druk {
+  font-family: "Druk";
+}
+
+.garet {
+  font-family: "Garet";
+}
+
+p {
+  font-family: "Garet";
+  font-size: 1rem;
+  line-height: 1.5;
+}

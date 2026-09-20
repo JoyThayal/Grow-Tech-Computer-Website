@@ -39,17 +39,20 @@ export default function Navbar() {
   return (
     <header className="w-full fixed top-0 left-0 z-50 p-3 sm:p-5">
       <nav className="max-w-7xl mx-auto bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-between rounded-full px-4 sm:px-6 py-2 text-white shadow-lg">
-        {/* লোগো */}
-        <Link href="/">
-          <Image
-            src="/images/logo-1.png"
-            width={90}
-            height={90}
-            alt="Logo"
-            className="w-16 sm:w-20 md:w-22.5 object-contain"
-            priority
-          />
-        </Link>
+        <div className="flex items-center justify-center gap-2 sm:gap-3">
+          {/* লোগো */}
+          <Link href="/">
+            <Image
+              src="/images/g.png"
+              width={90}
+              height={90}
+              alt="Logo"
+              className="w-16 sm:w-20 md:w-22.5 object-contain"
+              priority
+            />
+          </Link>
+          <span className="uppercase font-semibold hidden sm:block text-sm">Computer Services</span>
+        </div>
 
         {/* ডেস্কটপ মেনু */}
         <div className="hidden md:flex items-center gap-7 text-sm font-medium">

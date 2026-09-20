@@ -76,7 +76,6 @@ export default function TestimonialSection() {
   const [cardsCount, setCardsCount] = useState(4);
   const total = testimonials.length;
 
-  // স্ক্রিন সাইজ অনুযায়ী কার্ড সংখ্যা নির্ধারণ (ডেস্কটপে ৪টি, ট্যাবলেটে ২টি, মোবাইলে ১টি)
   useEffect(() => {
     const updateCardsCount = () => {
       if (window.innerWidth < 640) {

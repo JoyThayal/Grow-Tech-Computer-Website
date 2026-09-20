@@ -36,10 +36,6 @@ export default function HeroSection() {
     <section
       className={`relative min-h-[80vh] lg:h-screen w-full overflow-hidden transition-colors duration-700 ${heroItems[active].bgGradient}`}
     >
-      {/* 
-        মোবাইল/ট্যাবলেটে flex-col (বাঁ দিকের টেক্সট উপরে, ডান দিকের ইমেজ নিচে)
-        ডেস্কটপে (lg): হুবহু flex-row items-center justify-between h-full w-full px-16 
-      */}
       <div className="flex flex-col lg:flex-row items-center justify-center min-h-auto lg:h-full w-full px-6 sm:px-10 lg:px-16 pt-16 pb-20 lg:py-0 gap-8 lg:gap-0">
         {/* ================= বাঁ দিকের টেক্সট (মোবাইলে উপরে) ================= */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-4 lg:gap-5 w-full lg:w-[40%] text-white z-10">
@@ -50,7 +46,7 @@ export default function HeroSection() {
             Fast Laptop Repair & <br className="hidden sm:inline" /> Smart Cyber
             Solutions
           </h1>
-          <p className="text-xs sm:text-sm text-cyan-100/80 w-full sm:w-[90%] lg:w-[80%] leading-relaxed">
+          <p className="garet text-xs sm:text-sm text-cyan-100/80 w-full sm:w-[90%] lg:w-[80%] leading-relaxed">
             From advanced hardware repairs to quick online forms, printing, and
             digital services—get everything done under one roof with expert
             care.

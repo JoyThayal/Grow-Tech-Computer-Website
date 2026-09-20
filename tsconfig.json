@@ -32,6 +32,6 @@
     "components/ui/SpotlightCard.jsx",
     "components/common/SmoothScroll.jsx",
     "app/home-sections/HowItWorks.tsx"
-  ],
+, "app/book/page.jsx"  ],
   "exclude": ["node_modules"]
 }
