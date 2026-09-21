@@ -3,19 +3,12 @@
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, Suspense, useEffect } from "react";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Calendar,
-  Clock,
-  User,
-  Phone,
-  MessageSquare,
-  CheckCircle2,
-} from "lucide-react";
+import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import AuthModal from "@/components/ui/AuthModal";
 import ServiceCategoryModal from "@/components/ui/ServiceCategoryModal";
+import BookingSummary from "@/app/book/BookingSummary";
+import BookingForm from "@/app/book/BookingForm";
 
 function BookingCanvas() {
   const params = useSearchParams();
@@ -23,6 +16,7 @@ function BookingCanvas() {
   const supabase = createClient();
 
   const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
@@ -34,17 +28,35 @@ function BookingCanvas() {
   const service = params.get("service");
   const issue = params.get("issue");
   const category = params.get("category");
-  const exactPrice = params.get("price"); // সরাসরি কার্ড থেকে পাঠানো সঠিক দাম
+  const exactPrice = params.get("price");
 
-  // অ্যাসাইন করা ডেট ও সময় (Display-only)
+  const isCyberCafe =
+    category?.toLowerCase().includes("cyber") ||
+    category?.toLowerCase().includes("cafe");
+
+  const theme = {
+    focusColor: isCyberCafe ? "#06b6d4" : "#cb784a",
+    bgGlow: isCyberCafe ? "bg-cyan-500/10" : "bg-[#cb784a]/10",
+    border: isCyberCafe ? "border-cyan-500/30" : "border-[#cb784a]/30",
+    text: isCyberCafe ? "text-cyan-600" : "text-[#cb784a]",
+    selection: isCyberCafe ? "selection:bg-cyan-600" : "selection:bg-[#cb784a]",
+    button: isCyberCafe
+      ? "bg-cyan-600 hover:bg-cyan-700 shadow-cyan-600/25"
+      : "bg-[#cb784a] hover:bg-[#b5673d] shadow-[#cb784a]/25",
+  };
+
   const assignedDay = "Monday, 14 Sept 2026";
   const assignedSlot = "04:00 PM - 05:00 PM";
 
   useEffect(() => {
+    let isMounted = true;
+
     const verifyUserAndParams = async () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
+      if (!isMounted) return;
 
       if (!session) {
         setShowLoginModal(true);
@@ -64,7 +76,51 @@ function BookingCanvas() {
     };
 
     verifyUserAndParams();
-  }, [supabase, service, category]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [service, category]);
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const { error } = await supabase.from("bookings").insert([
+        {
+          user_id: session?.user?.id || null,
+          customer_name: name,
+          email: email,
+          phone: phone,
+          service_category: category || (isCyberCafe ? "CyberCafe" : "Repair"),
+          service_name: service,
+          issue_task: issue,
+          estimated_price: exactPrice ? decodeURIComponent(exactPrice) : "₹100",
+          assigned_date: assignedDay,
+          assigned_slot: assignedSlot,
+          additional_notes: message,
+          status: "pending",
+        },
+      ]);
+
+      if (error) {
+        alert("Booking failed: " + error.message);
+      } else {
+        alert("Slot booked successfully at Grow Tech Barrackpore! 🚀");
+        router.push("/");
+      }
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      alert("Error: " + errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -74,18 +130,16 @@ function BookingCanvas() {
     );
   }
 
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert("Slot booked successfully at Grow Tech!");
-  };
-
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-100 via-[#e6ecf2] to-slate-200 text-slate-700 flex flex-col justify-between font-sans px-6 md:px-16 lg:px-24 py-10 selection:bg-[#cb784a] selection:text-white relative overflow-hidden">
-      {/* Background Frosted Glow Accents */}
-      <div className="absolute top-10 left-10 w-96 h-96 bg-[#cb784a]/10 rounded-full blur-3xl pointer-events-none" />
+    <div
+      className={`min-h-screen bg-linear-to-br from-slate-100 via-[#e6ecf2] to-slate-200 text-slate-700 flex flex-col justify-between font-sans px-6 md:px-16 lg:px-24 py-10 ${theme.selection} selection:text-white relative overflow-hidden`}
+    >
+      <div
+        className={`absolute top-10 left-10 w-96 h-96 ${theme.bgGlow} rounded-full blur-3xl pointer-events-none`}
+      />
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      {/* Top Nav */}
+      {/* Header */}
       <header className="relative z-10 flex items-center justify-between border-b border-slate-300/80 pb-6 max-w-5xl mx-auto w-full">
         <Link
           href="/"
@@ -95,140 +149,44 @@ function BookingCanvas() {
           <span>BACK TO HOME</span>
         </Link>
         <span className="text-xs font-mono tracking-wider text-slate-600 uppercase bg-white/60 backdrop-blur-md border border-white/40 shadow-sm px-4 py-1.5 rounded-full">
-          Grow Tech · Desk Priority
+          Grow Tech · {isCyberCafe ? "Cyber Desk" : "Repair Desk"}
         </span>
       </header>
 
-      {/* Main Booking Form */}
+      {/* Main Content */}
       <main className="relative z-10 max-w-3xl mx-auto w-full py-10 md:py-14 space-y-10">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#cb784a]/10 border border-[#cb784a]/30 text-[#cb784a] text-xs font-mono">
-            DIRECT COUNTER INTAKE
+          <div
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.bgGlow} border ${theme.border} ${theme.text} text-xs font-mono`}
+          >
+            DIRECT COUNTER INTAKE (
+            {isCyberCafe ? "CYBER CAFE" : "HARDWARE REPAIR"})
           </div>
           <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-800 uppercase leading-tight">
-            Confirm Your <span className="text-[#cb784a]">Service Request</span>
+            Confirm Your <span className={theme.text}>Service Request</span>
           </h1>
 
-          {/* Selected Service, Issue & Exact Price Recap */}
-          <div className="p-5 rounded-3xl bg-white/70 backdrop-blur-xl border border-white/60 shadow-xl shadow-slate-300/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs">
-            <div className="space-y-1">
-              <span className="text-slate-400 font-mono uppercase block text-[11px]">
-                Selected Module:
-              </span>
-              <span className="text-slate-800 font-bold text-sm">
-                {service || "General Inspection"}
-              </span>
-            </div>
-            <div className="sm:text-right space-y-1">
-              <span className="text-slate-400 font-mono uppercase block text-[11px]">
-                Target Issue / Task & Exact Price:
-              </span>
-              <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <span className="text-[#cb784a] font-mono bg-[#cb784a]/10 px-2.5 py-1 rounded-md border border-[#cb784a]/20 font-medium">
-                  {issue || "Standard Checkup"}
-                </span>
-                {/* হুবহু কার্ডের দাম এখানে শো করবে */}
-                <span className="text-emerald-700 font-mono font-bold bg-emerald-500/10 px-3 py-1 rounded-md border border-emerald-500/20 shadow-sm text-sm">
-                  {exactPrice ? decodeURIComponent(exactPrice) : "₹100"}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Assigned Date & Time Display Box */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            <div className="p-4 rounded-2xl bg-white/60 backdrop-blur-lg border border-white/50 shadow-md flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#cb784a]/10 border border-[#cb784a]/20 flex items-center justify-center text-[#cb784a] shrink-0">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block">
-                  Assigned Date
-                </span>
-                <span className="text-sm font-bold text-slate-800">
-                  {assignedDay}
-                </span>
-              </div>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-white/60 backdrop-blur-lg border border-white/50 shadow-md flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#cb784a]/10 border border-[#cb784a]/20 flex items-center justify-center text-[#cb784a] shrink-0">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400 block">
-                  Assigned Time Window
-                </span>
-                <span className="text-sm font-bold text-slate-800">
-                  {assignedSlot}
-                </span>
-              </div>
-            </div>
-          </div>
+          <BookingSummary
+            service={service}
+            issue={issue}
+            exactPrice={exactPrice}
+            assignedDay={assignedDay}
+            assignedSlot={assignedSlot}
+            theme={theme}
+          />
         </div>
 
-        <form onSubmit={handleBookingSubmit} className="space-y-8">
-          {/* User Details */}
-          <div className="space-y-4">
-            <label className="text-xs font-mono uppercase tracking-wider text-slate-600 block">
-              Contact Information
-            </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <span className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
-                  <User className="w-3.5 h-3.5 text-[#cb784a]" /> Your Name
-                  (Google)
-                </span>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="w-full bg-white/80 backdrop-blur-md border border-slate-200 focus:border-[#cb784a] rounded-2xl px-4 py-3.5 text-sm text-slate-800 outline-none transition-all shadow-inner"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <span className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
-                  <Phone className="w-3.5 h-3.5 text-[#cb784a]" /> WhatsApp /
-                  Phone Number
-                </span>
-                <input
-                  type="tel"
-                  placeholder="+91 98765 43210"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                  className="w-full bg-white/80 backdrop-blur-md border border-slate-200 focus:border-[#cb784a] rounded-2xl px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all shadow-inner"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5 pt-2">
-              <span className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
-                <MessageSquare className="w-3.5 h-3.5 text-[#cb784a]" />{" "}
-                Additional Note (Optional)
-              </span>
-              <textarea
-                rows={3}
-                placeholder="Write any specific details about your device or document..."
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                className="w-full bg-white/80 backdrop-blur-md border border-slate-200 focus:border-[#cb784a] rounded-2xl px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all shadow-inner resize-none"
-              />
-            </div>
-          </div>
-
-          <div className="pt-2">
-            <button
-              type="submit"
-              className="group w-full sm:w-auto min-w-70 flex items-center justify-center gap-3 px-8 py-4 rounded-2xl bg-[#cb784a] hover:bg-[#b5673d] text-white font-bold text-sm transition-all duration-300 shadow-xl shadow-[#cb784a]/25 active:scale-[0.98] cursor-pointer"
-            >
-              <span>Confirm Service Request</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </div>
-        </form>
+        <BookingForm
+          name={name}
+          setName={setName}
+          phone={phone}
+          setPhone={setPhone}
+          message={message}
+          setMessage={setMessage}
+          onSubmit={handleBookingSubmit}
+          submitting={submitting}
+          theme={theme}
+        />
       </main>
 
       {/* Footer */}
@@ -240,7 +198,6 @@ function BookingCanvas() {
         </div>
       </footer>
 
-      {/* 1. Login Modal */}
       <AuthModal
         isOpen={showLoginModal}
         onClose={() => router.push("/")}
@@ -248,7 +205,6 @@ function BookingCanvas() {
         brandName="GROW TECH SECURE"
       />
 
-      {/* 2. Service Category Choice Modal */}
       <ServiceCategoryModal isOpen={showCategoryModal} />
     </div>
   );

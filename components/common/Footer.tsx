@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Phone,
   Mail,
@@ -7,6 +10,7 @@ import {
   Send,
   ShieldCheck,
   Zap,
+  LogOut,
 } from "lucide-react";
 import {
   FaFacebookF,
@@ -14,6 +18,7 @@ import {
   FaLinkedinIn,
   FaWhatsapp,
 } from "react-icons/fa6";
+import { createClient } from "@/lib/supabase/client";
 
 const services = [
   "SSD & RAM Upgrade",
@@ -39,11 +44,21 @@ const socials = [
 ];
 
 export default function Footer() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  // লগ-আউট হ্যান্ডেলার
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+    router.refresh();
+  };
+
   return (
     <footer className="w-full bg-[#0a0b0e] text-neutral-400 border-t border-neutral-800/80 pt-12 sm:pt-16 pb-10 px-5 sm:px-8 md:px-14 lg:px-20 font-sans selection:bg-cyan-500 selection:text-black">
       <div className="max-w-7xl mx-auto">
         {/* ================= CTA ব্যানার ================= */}
-        <div className="bg-linear-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-6 sm:p-8 md:p-10 rounded-3xl mb-12 sm:mb-16 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+        <div className="bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-6 sm:p-8 md:p-10 rounded-3xl mb-12 sm:mb-16 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
           <div className="space-y-2 text-center md:text-left flex flex-col items-center md:items-start">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide">
               <Zap className="w-3.5 h-3.5" /> FAST TECH SUPPORT & CYBER CARE
@@ -175,7 +190,15 @@ export default function Footer() {
             <ShieldCheck className="w-4 h-4 text-green-400 shrink-0" />
             <span>100% Genuine Components & Complete Data Privacy</span>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-3.5 sm:gap-5">
+
+          {/* লগ-আউট বাটন ও অন্যান্য লিংক */}
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+            <button
+              onClick={handleLogout}
+              className="inline-flex items-center gap-1.5 text-rose-400 hover:text-rose-300 font-semibold transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" /> Log Out
+            </button>
             <Link
               href="/privacy"
               className="hover:text-cyan-400 transition-colors"
