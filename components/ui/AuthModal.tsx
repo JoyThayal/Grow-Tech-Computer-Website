@@ -39,7 +39,7 @@ export default function AuthModal({
       ? pendingUrl
       : `${window.location.origin}/`;
 
-  // ১. গুগল দিয়ে এক ক্লিকে লগইন
+  // ১. গুগল দিয়ে সাইন ইন
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -103,55 +103,62 @@ export default function AuthModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="relative w-full max-w-md rounded-3xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-white/40 dark:border-slate-800/60 p-6 md:p-8 shadow-2xl shadow-slate-950/20 space-y-6 my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-md p-4 overflow-y-auto">
+      <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 md:p-8 shadow-2xl space-y-6 my-8">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-white/60 dark:bg-slate-800/60 hover:bg-white dark:hover:bg-slate-800 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition shadow-sm cursor-pointer"
+          type="button"
+          aria-label="Close modal"
+          className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Header */}
         <div className="space-y-2 text-center">
-          <span className="inline-block px-3.5 py-1 rounded-full text-[10px] font-mono tracking-widest text-[#cb784a] bg-[#cb784a]/10 border border-[#cb784a]/20 uppercase">
+          <span className="inline-block px-3.5 py-1 rounded-full text-[10px] font-mono tracking-widest text-[#cb784a] bg-[#cb784a]/10 border border-[#cb784a]/20 uppercase font-semibold">
             {brandName} Direct Desk
           </span>
-          <h3 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight">
+          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             {step === "email" ? "Instant Sign In ✨" : "Enter Email Code 📩"}
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
             {step === "email"
-              ? "গুগল দিয়ে অথবা ইমেইলে সরাসরি ওটিপি কোড নিয়ে লগইন করুন।"
-              : `আমরা একটি ৬ ডিজিটের কোড পাঠালাম: ${email}`}
+              ? "Login with Google or enter your email address to sign in."
+              : `Enter the code we just sent to: ${email}`}
           </p>
         </div>
 
-        {/* Google Login (শুধু প্রথম স্টেপে দেখাবে) */}
+        {/* Google Login (শুধু প্রথম ধাপে প্রদর্শিত হবে) */}
         {step === "email" && (
           <>
             <button
               onClick={handleGoogleLogin}
               type="button"
-              className="w-full py-3.5 px-4 rounded-2xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-semibold text-xs tracking-wide border border-slate-200/80 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-750 active:scale-[0.98] transition shadow-md shadow-slate-200/50 dark:shadow-none flex items-center justify-center gap-3 cursor-pointer"
+              className="w-full py-3 px-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-100 font-semibold text-xs tracking-wide hover:bg-slate-50 dark:hover:bg-slate-700/70 hover:border-slate-400 dark:hover:border-slate-600 active:scale-[0.98] transition-all shadow-sm flex items-center justify-center gap-3 cursor-pointer"
             >
-              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24">
+              {/* হাই-কোয়ালিটি অফিসিয়াল গুগল আইকন */}
+              <svg
+                className="w-4 h-4 shrink-0"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <path
-                  fill="#EA4335"
-                  d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.8 7.3l3.7 2.9C6.4 7.2 9 5 12 5z"
-                />
-                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                   fill="#4285F4"
-                  d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
                 />
                 <path
-                  fill="#FBBC05"
-                  d="M5.5 14.8c-.2-.8-.4-1.7-.4-2.8s.2-2 .4-2.8L1.8 6.3C.7 8.5 0 10.2 0 12s.7 3.5 1.8 5.7l3.7-2.9z"
-                />
-                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
                   fill="#34A853"
-                  d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.6-2.2-6.5-5.2L1.8 16c1.9 3.7 5.7 7 10.2 7z"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  fill="#EA4335"
                 />
               </svg>
               <span>Continue with Google</span>
@@ -165,14 +172,14 @@ export default function AuthModal({
           </>
         )}
 
-        {/* এরর মেসেজ */}
+        {/* এরর মেসেজ বক্স */}
         {errorMsg && (
           <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs text-center font-medium">
             {errorMsg}
           </div>
         )}
 
-        {/* ধাপ ১: ইমেইল ইনপুট ফর্ম */}
+        {/* ধাপ ১: ইমেইল ইনপুট */}
         {step === "email" ? (
           <form onSubmit={handleSendOtp} className="space-y-4">
             <div className="space-y-1.5">
@@ -185,14 +192,14 @@ export default function AuthModal({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-white outline-none transition shadow-inner"
+                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-white outline-none transition shadow-inner"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-[#cb784a] hover:bg-[#b5673d] text-white font-bold text-xs tracking-wide transition shadow-lg shadow-[#cb784a]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
+              className="w-full py-3.5 px-4 rounded-xl bg-[#cb784a] hover:bg-[#b5673d] text-white font-bold text-xs tracking-wide transition-all shadow-md shadow-[#cb784a]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -205,7 +212,7 @@ export default function AuthModal({
             </button>
           </form>
         ) : (
-          /* ধাপ ২: ৬ ডিজিটের ওটিপি ইনপুট ফর্ম */
+          /* ধাপ ২: ওটিপি কোড ইনপুট */
           <form onSubmit={handleVerifyOtp} className="space-y-4">
             <div className="space-y-1.5">
               <span className="text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
@@ -219,14 +226,14 @@ export default function AuthModal({
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 required
-                className="w-full tracking-widest text-center text-lg font-mono font-bold bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-slate-800 dark:text-white outline-none transition shadow-inner"
+                className="w-full tracking-widest text-center text-lg font-mono font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-slate-800 dark:text-white outline-none transition shadow-inner"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wide transition shadow-lg shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
+              className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wide transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -246,7 +253,7 @@ export default function AuthModal({
                   setOtp("");
                   setErrorMsg("");
                 }}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition-colors cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" /> Change Email
               </button>

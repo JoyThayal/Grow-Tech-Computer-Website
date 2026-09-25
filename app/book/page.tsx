@@ -14,6 +14,7 @@ function BookingCanvas() {
   const params = useSearchParams();
   const router = useRouter();
   const supabase = createClient();
+  const { auth } = supabase;
 
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -54,7 +55,7 @@ function BookingCanvas() {
     const verifyUserAndParams = async () => {
       const {
         data: { session },
-      } = await supabase.auth.getSession();
+      } = await auth.getSession();
 
       if (!isMounted) return;
 
@@ -80,7 +81,7 @@ function BookingCanvas() {
     return () => {
       isMounted = false;
     };
-  }, [service, category]);
+  }, [auth, service, category]);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

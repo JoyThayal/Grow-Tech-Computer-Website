@@ -58,7 +58,7 @@ export default function Footer() {
     <footer className="w-full bg-[#0a0b0e] text-neutral-400 border-t border-neutral-800/80 pt-12 sm:pt-16 pb-10 px-5 sm:px-8 md:px-14 lg:px-20 font-sans selection:bg-cyan-500 selection:text-black">
       <div className="max-w-7xl mx-auto">
         {/* ================= CTA ব্যানার ================= */}
-        <div className="bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-6 sm:p-8 md:p-10 rounded-3xl mb-12 sm:mb-16 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+        <div className="bg-linear-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-6 sm:p-8 md:p-10 rounded-3xl mb-12 sm:mb-16 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
           <div className="space-y-2 text-center md:text-left flex flex-col items-center md:items-start">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide">
               <Zap className="w-3.5 h-3.5" /> FAST TECH SUPPORT & CYBER CARE
