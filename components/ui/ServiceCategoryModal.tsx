@@ -26,7 +26,7 @@ export default function ServiceCategoryModal({
             Which service do you need? 🛠️
           </h3>
           <p className="text-xs text-slate-500 dark:text-neutral-400 leading-relaxed max-w-xs mx-auto">
-            You came directly to the booking page. Please select a category
+            Please select a category
             below to proceed with the right service:
           </p>
         </div>

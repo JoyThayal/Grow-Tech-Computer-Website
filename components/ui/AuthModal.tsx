@@ -4,10 +4,10 @@ import { useState } from "react";
 import {
   X,
   Mail,
-  KeyRound,
+  Lock,
   ArrowRight,
   Loader2,
-  RefreshCw,
+  CheckCircle2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -25,8 +25,9 @@ export default function AuthModal({
   brandName = "GROW TECH",
 }: AuthModalProps) {
   const [email, setEmail] = useState("");
-  const [otp, setOtp] = useState("");
-  const [step, setStep] = useState<"email" | "otp">("email");
+  const [password, setPassword] = useState("");
+  const [mode, setMode] = useState<"signup" | "login">("signup");
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +40,7 @@ export default function AuthModal({
       ? pendingUrl
       : `${window.location.origin}/`;
 
-  // ১. গুগল দিয়ে সাইন ইন
+  // ১. গুগল দিয়ে সরাসরি সাইন ইন
   const handleGoogleLogin = async () => {
     await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -49,53 +50,44 @@ export default function AuthModal({
     });
   };
 
-  // ২. ইমেইলে ওটিপি পাঠানোর লজিক
-  const handleSendOtp = async (e: React.FormEvent) => {
+  // ২. ইমেইল ও পাসওয়ার্ড দিয়ে সাইন আপ (লিঙ্ক ভেরিফিকেশন) অথবা লগইন
+  const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          shouldCreateUser: true,
-        },
-      });
+      if (mode === "signup") {
+        // সাইন আপ: ইমেইলে কনফার্মেশন লিঙ্ক পাঠানো হবে
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(redirectTarget)}`,
+          },
+        });
 
-      if (error) {
-        setErrorMsg(error.message);
+        if (error) {
+          setErrorMsg(error.message);
+        } else {
+          setIsSubmitted(true);
+        }
       } else {
-        setStep("otp");
-      }
-    } catch (err: unknown) {
-      setErrorMsg(err instanceof Error ? err.message : "Failed to send code!");
-    } finally {
-      setLoading(false);
-    }
-  };
+        // লগইন: সরাসরি ইমেইল ও পাসওয়ার্ড দিয়ে সাইন ইন
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-  // ৩. ওটিপি ভেরিফাই করে লগইন সম্পন্ন করা
-  const handleVerifyOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg("");
-    setLoading(true);
-
-    try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email,
-        token: otp.trim(),
-        type: "email",
-      });
-
-      if (error) {
-        setErrorMsg(error.message);
-      } else if (data.session) {
-        window.location.href = redirectTarget;
+        if (error) {
+          setErrorMsg(error.message);
+        } else if (data.session) {
+          window.location.href = redirectTarget;
+        }
       }
     } catch (err: unknown) {
       setErrorMsg(
-        err instanceof Error ? err.message : "Invalid verification code!",
+        err instanceof Error ? err.message : "Authentication process failed!",
       );
     } finally {
       setLoading(false);
@@ -115,30 +107,64 @@ export default function AuthModal({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Header */}
-        <div className="space-y-2 text-center">
-          <span className="inline-block px-3.5 py-1 rounded-full text-[10px] font-mono tracking-widest text-[#cb784a] bg-[#cb784a]/10 border border-[#cb784a]/20 uppercase font-semibold">
-            {brandName} Direct Desk
-          </span>
-          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-            {step === "email" ? "Instant Sign In ✨" : "Enter Email Code 📩"}
-          </h3>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
-            {step === "email"
-              ? "Login with Google or enter your email address to sign in."
-              : `Enter the code we just sent to: ${email}`}
-          </p>
-        </div>
+        {/* লিঙ্ক পাঠানোর পর সাকসেস মেসেজ স্ক্রিন */}
+        {isSubmitted ? (
+          <div className="space-y-5 text-center py-4">
+            <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 flex items-center justify-center mx-auto shadow-inner">
+              <CheckCircle2 className="w-7 h-7" />
+            </div>
 
-        {/* Google Login (শুধু প্রথম ধাপে প্রদর্শিত হবে) */}
-        {step === "email" && (
+            <div className="space-y-2">
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                Verify Your Email 📩
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
+                We have sent a verification link to:
+                <br />
+                <span className="font-mono font-bold text-slate-800 dark:text-slate-200">
+                  {email}
+                </span>
+              </p>
+              <p className="text-[11px] text-slate-500 leading-relaxed pt-2">
+                Please check your inbox (or spam folder) and click the link to
+                activate your account.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setIsSubmitted(false);
+                setMode("login");
+              }}
+              className="w-full py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs transition cursor-pointer"
+            >
+              Back to Sign In
+            </button>
+          </div>
+        ) : (
           <>
+            {/* Header */}
+            <div className="space-y-2 text-center">
+              <span className="inline-block px-3.5 py-1 rounded-full text-[10px] font-mono tracking-widest text-[#cb784a] bg-[#cb784a]/10 border border-[#cb784a]/20 uppercase font-semibold">
+                {brandName} Direct Desk
+              </span>
+              <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                {mode === "signup" ? "Create an Account ✨" : "Welcome Back 👋"}
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-xs mx-auto">
+                {mode === "signup"
+                  ? "Enter your email & password to register. We will send a confirmation link."
+                  : "Sign in with your email and password to proceed."}
+              </p>
+            </div>
+
+            {/* Google Login */}
             <button
               onClick={handleGoogleLogin}
               type="button"
               className="w-full py-3 px-4 rounded-2xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-100 font-semibold text-xs tracking-wide hover:bg-slate-50 dark:hover:bg-slate-700/70 hover:border-slate-400 dark:hover:border-slate-600 active:scale-[0.98] transition-all shadow-sm flex items-center justify-center gap-3 cursor-pointer"
             >
-              {/* হাই-কোয়ালিটি অফিসিয়াল গুগল আইকন */}
               <svg
                 className="w-4 h-4 shrink-0"
                 viewBox="0 0 24 24"
@@ -166,99 +192,94 @@ export default function AuthModal({
 
             <div className="flex items-center gap-4 text-xs text-slate-400 uppercase font-mono">
               <div className="h-px bg-slate-200 dark:bg-slate-800 flex-1" />
-              <span>Or Email Code</span>
+              <span>Or Use Credentials</span>
               <div className="h-px bg-slate-200 dark:bg-slate-800 flex-1" />
             </div>
-          </>
-        )}
 
-        {/* এরর মেসেজ বক্স */}
-        {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs text-center font-medium">
-            {errorMsg}
-          </div>
-        )}
+            {/* এরর মেসেজ বক্স */}
+            {errorMsg && (
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs text-center font-medium">
+                {errorMsg}
+              </div>
+            )}
 
-        {/* ধাপ ১: ইমেইল ইনপুট */}
-        {step === "email" ? (
-          <form onSubmit={handleSendOtp} className="space-y-4">
-            <div className="space-y-1.5">
-              <span className="text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5 text-[#cb784a]" /> Email Address
-              </span>
-              <input
-                type="email"
-                placeholder="name@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-white outline-none transition shadow-inner"
-              />
-            </div>
+            {/* ইমেইল ও পাসওয়ার্ড ফর্ম */}
+            <form onSubmit={handleAuthSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <span className="text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-[#cb784a]" /> Email Address
+                </span>
+                <input
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-white outline-none transition shadow-inner"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-[#cb784a] hover:bg-[#b5673d] text-white font-bold text-xs tracking-wide transition-all shadow-md shadow-[#cb784a]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <span>Send OTP Code</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-          </form>
-        ) : (
-          /* ধাপ ২: ওটিপি কোড ইনপুট */
-          <form onSubmit={handleVerifyOtp} className="space-y-4">
-            <div className="space-y-1.5">
-              <span className="text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
-                <KeyRound className="w-3.5 h-3.5 text-[#cb784a]" /> 6-Digit OTP
-                Code
-              </span>
-              <input
-                type="text"
-                maxLength={6}
-                placeholder="123456"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                required
-                className="w-full tracking-widest text-center text-lg font-mono font-bold bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-slate-800 dark:text-white outline-none transition shadow-inner"
-              />
-            </div>
+              <div className="space-y-1.5">
+                <span className="text-xs text-slate-600 dark:text-slate-300 font-medium flex items-center gap-1.5">
+                  <Lock className="w-3.5 h-3.5 text-[#cb784a]" /> Password
+                </span>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  minLength={6}
+                  required
+                  className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-[#cb784a] rounded-xl px-4 py-3 text-xs text-slate-800 dark:text-white outline-none transition shadow-inner"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs tracking-wide transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <>
-                  <span>Verify & Proceed</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
-            </button>
-
-            <div className="text-center pt-1">
               <button
-                type="button"
-                onClick={() => {
-                  setStep("email");
-                  setOtp("");
-                  setErrorMsg("");
-                }}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition-colors cursor-pointer"
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 px-4 rounded-xl bg-[#cb784a] hover:bg-[#b5673d] text-white font-bold text-xs tracking-wide transition-all shadow-md shadow-[#cb784a]/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98] disabled:opacity-50"
               >
-                <RefreshCw className="w-3 h-3" /> Change Email
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <>
+                    <span>
+                      {mode === "signup"
+                        ? "Send Verification Link"
+                        : "Sign In to Account"}
+                    </span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
               </button>
-            </div>
-          </form>
+
+              {/* মোড সুইচ বাটন (Sign Up <-> Login) */}
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode((prev) => (prev === "signup" ? "login" : "signup"));
+                    setErrorMsg("");
+                  }}
+                  className="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition cursor-pointer"
+                >
+                  {mode === "signup" ? (
+                    <>
+                      Already have an account?{" "}
+                      <span className="font-bold text-[#cb784a]">Sign In</span>
+                    </>
+                  ) : (
+                    <>
+                      Don&apos;t have an account?{" "}
+                      <span className="font-bold text-[#cb784a]">
+                        Create Account
+                      </span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+          </>
         )}
       </div>
     </div>

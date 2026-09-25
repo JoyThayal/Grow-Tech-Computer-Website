@@ -68,6 +68,8 @@ function BookingCanvas() {
       const user = session.user;
       setName(user.user_metadata?.full_name || user.user_metadata?.name || "");
       setEmail(user.email || "");
+      // প্রোফাইলে সেভ থাকা ফোন নম্বর অটো-ফিল হবে 📞✨
+      setPhone(user.user_metadata?.phone || "");
 
       if (!service || !category) {
         setShowCategoryModal(true);

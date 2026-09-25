@@ -38,15 +38,15 @@ export default function BookingForm({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <span className="text-xs text-slate-600 font-medium flex items-center gap-1.5">
-              <User className={`w-3.5 h-3.5 ${theme.text}`} /> Your Name
-              (Google)
+              <User className={`w-3.5 h-3.5 ${theme.text}`} /> Your Full Name
             </span>
             <input
               type="text"
+              placeholder="Enter your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className={`w-full bg-white/80 backdrop-blur-md border border-slate-200 focus:border-[${theme.focusColor}] rounded-2xl px-4 py-3.5 text-sm text-slate-800 outline-none transition-all shadow-inner`}
+              className={`w-full bg-white/80 backdrop-blur-md border border-slate-200 focus:border-[${theme.focusColor}] rounded-2xl px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all shadow-inner`}
             />
           </div>
 

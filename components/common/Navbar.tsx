@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, Wrench, Printer } from "lucide-react";
+import { ChevronDown, Wrench, Printer, User as UserIcon } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
-// সার্ভিস পেজ লিংক
 const servicePages = [
   {
     name: "PC & Laptop Repair",
@@ -22,7 +23,6 @@ const servicePages = [
   },
 ];
 
-// হোমপেজের সেকশন লিংক
 const homeSections = [
   { name: "Overview", href: "/#services" },
   { name: "How It Works", href: "/#how-it-works" },
@@ -35,12 +35,25 @@ const homeSections = [
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdown, setDropdown] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      },
+    );
+
+    return () => listener.subscription.unsubscribe();
+  }, [supabase.auth]);
 
   return (
     <header className="w-full fixed top-0 left-0 z-50 p-3 sm:p-5">
       <nav className="max-w-7xl mx-auto bg-black/20 backdrop-blur-md border border-white/10 flex items-center justify-between rounded-full px-4 sm:px-6 py-2 text-white shadow-lg">
         <div className="flex items-center justify-center gap-2 sm:gap-3">
-          {/* লোগো */}
           <Link href="/">
             <Image
               src="/images/g.png"
@@ -51,16 +64,18 @@ export default function Navbar() {
               priority
             />
           </Link>
-          <span className="uppercase font-semibold hidden sm:block text-sm">Computer Services</span>
+          <span className="uppercase font-semibold hidden sm:block text-sm">
+            Computer Services
+          </span>
         </div>
 
-        {/* ডেস্কটপ মেনু */}
+        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-7 text-sm font-medium">
           <Link href="/" className="hover:text-cyan-300 transition">
             Home
           </Link>
 
-          {/* সার্ভিসেস ড্রপডাউন */}
+          {/* Services Dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setDropdown("services")}
@@ -107,7 +122,7 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          {/* এক্সপ্লোর ড্রপডাউন (সব সেকশন) */}
+          {/* Explore Dropdown */}
           <div
             className="relative"
             onMouseEnter={() => setDropdown("explore")}
@@ -146,19 +161,29 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* কনট্যাক্ট বাটন ও মোবাইল মেনু টগল */}
-        <div className="flex items-center gap-2.5">
+        {/* Action Buttons: Contact Us + Circular Profile Icon */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <Link
             href="/contact"
-            className="bg-white text-slate-950 font-semibold px-4 py-1.5 rounded-full hover:bg-cyan-100 transition text-xs sm:text-sm"
+            className="bg-white text-slate-950 font-semibold px-4 py-1.5 rounded-full hover:bg-cyan-100 transition text-xs sm:text-sm shadow-sm"
           >
             Contact Us
           </Link>
 
+          {user && (
+            <Link
+              href="/profile"
+              title="My Profile"
+              className="w-9 h-9 sm:w-9.5 sm:h-9.5 rounded-full bg-cyan-400 hover:bg-cyan-300 text-slate-950 flex items-center justify-center transition-all duration-300 shadow-md shadow-cyan-500/20 active:scale-95 border border-cyan-200"
+            >
+              <UserIcon className="w-4.5 h-4.5 stroke-[2.5]" />
+            </Link>
+          )}
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
-            className="md:hidden w-9 h-9 flex flex-col items-center justify-center gap-1 rounded-full bg-white/10 cursor-pointer"
+            className="md:hidden w-8.5 h-8.5 sm:w-9 sm:h-9 flex flex-col items-center justify-center gap-1 rounded-full bg-white/10 cursor-pointer"
           >
             <motion.span
               animate={
@@ -188,7 +213,7 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* মোবাইল ড্রপডাউন */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -197,6 +222,16 @@ export default function Navbar() {
             exit={{ opacity: 0, y: -10 }}
             className="md:hidden mt-2 bg-black/85 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 flex flex-col gap-2 max-h-[80vh] overflow-y-auto"
           >
+            {user && (
+              <Link
+                href="/profile"
+                onClick={() => setIsOpen(false)}
+                className="py-2 px-3 text-sm font-semibold text-cyan-300 bg-white/5 rounded-xl flex items-center gap-2"
+              >
+                <UserIcon className="w-4 h-4" /> My Profile
+              </Link>
+            )}
+
             <Link
               href="/"
               onClick={() => setIsOpen(false)}

@@ -52,11 +52,14 @@ export default function HeroSection() {
             care.
           </p>
           <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
-            <button className="bg-white text-slate-900 font-bold px-5 sm:px-6 py-2 rounded-full hover:bg-cyan-100 transition shadow-lg cursor-pointer text-sm sm:text-base">
-              Contact Us
-            </button>
             <Link
-              href="/"
+              href="/contact"
+              className="bg-white text-slate-900 font-bold px-5 sm:px-6 py-2 rounded-full hover:bg-cyan-100 transition shadow-lg cursor-pointer text-sm sm:text-base inline-block text-center"
+            >
+              Contact Us
+            </Link>
+            <Link
+              href="/book"
               className="border border-white/80 text-white font-medium px-5 sm:px-6 py-2 rounded-full hover:bg-white/10 transition text-sm sm:text-base"
             >
               Our Services
