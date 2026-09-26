@@ -36,7 +36,7 @@ export default function HeroSection() {
     <section
       className={`relative min-h-[80vh] lg:h-screen w-full overflow-hidden transition-colors duration-700 ${heroItems[active].bgGradient}`}
     >
-      <div className="flex flex-col lg:flex-row items-center justify-center min-h-auto lg:h-full w-full px-6 sm:px-10 lg:px-16 pt-16 pb-20 lg:py-0 gap-8 lg:gap-0">
+      <div className="flex flex-col lg:flex-row items-center justify-center min-h-auto lg:h-full w-full px-6 sm:px-10 lg:px-16 pt-25 pb-20 lg:py-0 gap-8 lg:gap-0">
         {/* ================= বাঁ দিকের টেক্সট (মোবাইলে উপরে) ================= */}
         <div className="flex flex-col items-center lg:items-start text-center lg:text-left gap-4 lg:gap-5 w-full lg:w-[40%] text-white z-10">
           <span className="text-xs sm:text-sm font-semibold tracking-wider text-cyan-200 uppercase">

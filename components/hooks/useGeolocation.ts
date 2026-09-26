@@ -12,11 +12,12 @@ export function useGeolocation() {
     onError: (msg: string) => void,
   ) => {
     if (!navigator.geolocation) {
-      onError("Geolocation not supported");
+      onError("Geolocation is not supported by your current browser.");
       return;
     }
 
     setDetecting(true);
+
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         const { latitude: lat, longitude: lng } = coords;
@@ -46,11 +47,30 @@ export function useGeolocation() {
       },
       (err) => {
         setDetecting(false);
-        onError(
-          err.code === 1 ? "Permission denied" : "Unable to fetch location",
-        );
+        switch (err.code) {
+          case 1: // PERMISSION_DENIED
+            onError(
+              "Location access was blocked by you. Please tap the Tune/Sliders icon near your browser address bar, set Location to 'Allow', and refresh the page.",
+            );
+            break;
+          case 2: // POSITION_UNAVAILABLE
+            onError(
+              "Unable to detect your device GPS signal. Please turn on your phone's Location service and try again.",
+            );
+            break;
+          case 3: // TIMEOUT
+            onError(
+              "Location request timed out. Please check your network connection and try again.",
+            );
+            break;
+          default:
+            onError(
+              "Failed to retrieve your location automatically. Please enter your address manually.",
+            );
+            break;
+        }
       },
-      { timeout: 10000, enableHighAccuracy: true },
+      { timeout: 12000, enableHighAccuracy: true, maximumAge: 10000 },
     );
   };
 

@@ -9,7 +9,7 @@ import AuthModal from "@/components/ui/AuthModal";
 import ServiceCategoryModal from "@/components/ui/ServiceCategoryModal";
 import BookingSummary from "@/app/book/BookingSummary";
 import BookingForm from "@/app/book/BookingForm";
-import BookingSuccessModal from "@/app/book//BookingSuccessModal";
+import BookingSuccessModal from "@/app/book/BookingSuccessModal";
 
 function BookingCanvas() {
   const params = useSearchParams();
@@ -151,7 +151,7 @@ function BookingCanvas() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center text-slate-500 font-mono text-xs">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center text-slate-500 font-mono text-xs p-4">
         Verifying secure session... 🔒
       </div>
     );
@@ -159,15 +159,16 @@ function BookingCanvas() {
 
   return (
     <div
-      className={`min-h-screen bg-linear-to-br from-slate-100 via-[#e6ecf2] to-slate-200 text-slate-700 flex flex-col justify-between font-sans px-6 md:px-16 lg:px-24 py-10 ${theme.selection} selection:text-white relative overflow-hidden`}
+      className={`min-h-screen bg-linear-to-br from-slate-100 via-[#e6ecf2] to-slate-200 text-slate-700 flex flex-col justify-between font-sans px-4 sm:px-8 md:px-12 lg:px-20 pb-10 sm:py-20 md:py-25 ${theme.selection} selection:text-white relative overflow-hidden`}
     >
+      {/* Decorative Glows */}
       <div
-        className={`absolute top-10 left-10 w-96 h-96 ${theme.bgGlow} rounded-full blur-3xl pointer-events-none`}
+        className={`absolute top-10 left-10 w-72 sm:w-96 h-72 sm:h-96 ${theme.bgGlow} rounded-full blur-3xl pointer-events-none`}
       />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-72 sm:w-96 h-72 sm:h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
-      <header className="relative z-10 flex items-center justify-between border-b border-slate-300/80 pb-6 max-w-5xl mx-auto w-full">
+      <header className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-300/80 pb-5 max-w-5xl mx-auto w-full">
         <Link
           href="/"
           className="group inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-slate-800 transition-colors"
@@ -175,21 +176,21 @@ function BookingCanvas() {
           <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
           <span>BACK TO HOME</span>
         </Link>
-        <span className="text-xs font-mono tracking-wider text-slate-600 uppercase bg-white/60 backdrop-blur-md border border-white/40 shadow-sm px-4 py-1.5 rounded-full">
+        <span className="text-[11px] sm:text-xs font-mono tracking-wider text-slate-600 uppercase bg-white/70 backdrop-blur-md border border-white/50 shadow-xs px-3.5 py-1.5 rounded-full self-start sm:self-auto">
           Grow Tech · {isCyberCafe ? "Cyber Desk" : "Repair Desk"}
         </span>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-3xl mx-auto w-full py-10 md:py-14 space-y-10">
-        <div className="space-y-4">
+      <main className="relative z-10 max-w-3xl mx-auto w-full py-8 sm:py-12 space-y-8 sm:space-y-10">
+        <div className="space-y-3 sm:space-y-4">
           <div
-            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.bgGlow} border ${theme.border} ${theme.text} text-xs font-mono`}
+            className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${theme.bgGlow} border ${theme.border} ${theme.text} text-[11px] sm:text-xs font-mono`}
           >
             DIRECT COUNTER INTAKE (
             {isCyberCafe ? "CYBER CAFE" : "HARDWARE REPAIR"})
           </div>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-800 uppercase leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-slate-800 uppercase leading-tight">
             Confirm Your <span className={theme.text}>Service Request</span>
           </h1>
 
@@ -203,31 +204,37 @@ function BookingCanvas() {
           />
         </div>
 
-        <BookingForm
-          name={name}
-          setName={setName}
-          phone={phone}
-          setPhone={setPhone}
-          location={location}
-          setLocation={(val) => {
-            setLocation(val);
-            setCoords(null);
-          }}
-          mapsLink={mapsLink}
-          message={message}
-          setMessage={setMessage}
-          onSubmit={handleBookingSubmit}
-          submitting={submitting}
-          theme={theme}
-        />
+        <div className="w-full min-w-0">
+          <BookingForm
+            name={name}
+            setName={setName}
+            phone={phone}
+            setPhone={setPhone}
+            location={location}
+            setLocation={(val) => {
+              setLocation(val);
+              setCoords(null);
+            }}
+            mapsLink={mapsLink}
+            message={message}
+            setMessage={setMessage}
+            onSubmit={handleBookingSubmit}
+            submitting={submitting}
+            theme={theme}
+          />
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-slate-300/80 pt-6 max-w-5xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-slate-500">
-        <span>BARRACKPORE CENTER · NO ADVANCE FEES</span>
-        <div className="flex items-center gap-2 text-slate-700">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          <span>Pay at shop counter upon completion</span>
+      <footer className="relative z-10 border-t border-slate-300/80 pt-5 max-w-5xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left text-xs font-mono text-slate-500">
+        <span className="text-[11px] sm:text-xs tracking-wider">
+          NORTH 24 PARGANAS · NO ADVANCE FEES
+        </span>
+        <div className="flex items-center gap-2 text-slate-700 justify-center">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span className="text-[11px] sm:text-xs">
+            Pay at shop counter upon completion
+          </span>
         </div>
       </footer>
 
@@ -241,7 +248,6 @@ function BookingCanvas() {
 
       <ServiceCategoryModal isOpen={showCategoryModal} />
 
-      {/* আলাদা করা সাকসেস মডাল 🎯 */}
       <BookingSuccessModal
         isOpen={showSuccessModal}
         serviceName={service || "Hardware & Cyber Service"}
@@ -254,7 +260,13 @@ function BookingCanvas() {
 
 export default function BookingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-100" />}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-100 flex items-center justify-center font-mono text-xs text-slate-500">
+          Loading booking workspace...
+        </div>
+      }
+    >
       <BookingCanvas />
     </Suspense>
   );

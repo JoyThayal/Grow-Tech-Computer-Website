@@ -12,7 +12,7 @@ const testimonials = [
     company: "Maa Bhavani Traders",
     quote:
       "Urgent government portal submissions and billing tasks are handled with extreme care. Hassle-free experience every time.",
-    img: "/images/testimonial-biprajit.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const testimonials = [
     company: "Barrackpore Academy",
     quote:
       "Got school project documentation and premium color prints with crisp clarity. Fast turnaround and completely dependable.",
-    img: "/images/testimonial-joy.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ const testimonials = [
     company: "Creative Frame Studio",
     quote:
       "My editing rig was sluggish; they upgraded it with a genuine NVMe SSD and thermal cleanup. Running silky smooth now!",
-    img: "/images/testimonial-biprajit.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 4,
@@ -39,7 +39,7 @@ const testimonials = [
     company: "B.R.S.N. College",
     quote:
       "Quick assistance with exam form fill-ups, admit printouts, and digital portal aid. Very supportive and polite behavior.",
-    img: "/images/testimonial-joy.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 5,
@@ -48,7 +48,7 @@ const testimonials = [
     company: "Arogya Medicine Corner",
     quote:
       "Fixed our counter billing PC and reinstalled the software without any data loss. Top-notch diagnostic work.",
-    img: "/images/testimonial-biprajit.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 6,
@@ -57,7 +57,7 @@ const testimonials = [
     company: "Govt Exam Prep Desk",
     quote:
       "PAN card correction and document scans were handled on an urgent basis. You can rely on them with eyes closed.",
-    img: "/images/testimonial-joy.png",
+    img: "/images/testimonial-demo.png",
   },
   {
     id: 7,
@@ -66,7 +66,7 @@ const testimonials = [
     company: "Motion Drops Media",
     quote:
       "Photo laminations, high-res prints, and quick PC optimization—all done at fair, transparent pricing. Pure dedication!",
-    img: "/images/testimonial-biprajit.png",
+    img: "/images/testimonial-demo.png",
   },
 ];
 

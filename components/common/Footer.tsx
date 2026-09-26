@@ -1,24 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Send,
-  ShieldCheck,
-  Zap,
-  LogOut,
-} from "lucide-react";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaLinkedinIn,
-  FaWhatsapp,
-} from "react-icons/fa6";
-import { createClient } from "@/lib/supabase/client";
+import { Phone, Mail, MapPin, Clock, ShieldCheck, Zap } from "lucide-react";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
 
 const services = [
   "SSD & RAM Upgrade",
@@ -40,46 +24,36 @@ const socials = [
   { name: "Facebook", href: "https://facebook.com", icon: FaFacebookF },
   { name: "Instagram", href: "https://instagram.com", icon: FaInstagram },
   { name: "LinkedIn", href: "https://linkedin.com", icon: FaLinkedinIn },
-  { name: "WhatsApp", href: "https://wa.me/91XXXXXXXXXX", icon: FaWhatsapp },
 ];
 
 export default function Footer() {
-  const router = useRouter();
-  const supabase = createClient();
-
-  // লগ-আউট হ্যান্ডেলার
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  };
-
   return (
-    <footer className="w-full bg-[#0a0b0e] text-neutral-400 border-t border-neutral-800/80 pt-12 sm:pt-16 pb-10 px-5 sm:px-8 md:px-14 lg:px-20 font-sans selection:bg-cyan-500 selection:text-black">
+    <footer className="w-full bg-[#0a0b0e] text-neutral-400 border-t border-neutral-800/80 pt-10 sm:pt-14 md:pt-16 pb-8 sm:pb-10 px-4 sm:px-8 md:px-12 lg:px-16 font-sans selection:bg-cyan-500 selection:text-black">
       <div className="max-w-7xl mx-auto">
         {/* ================= CTA ব্যানার ================= */}
-        <div className="bg-linear-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-6 sm:p-8 md:p-10 rounded-3xl mb-12 sm:mb-16 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
-          <div className="space-y-2 text-center md:text-left flex flex-col items-center md:items-start">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide">
-              <Zap className="w-3.5 h-3.5" /> FAST TECH SUPPORT & CYBER CARE
+        <div className="bg-linear-to-r from-neutral-900 via-neutral-900/90 to-[#0e171b] border border-neutral-800 hover:border-cyan-500/30 transition-colors p-5 sm:p-7 md:p-9 rounded-3xl mb-10 sm:mb-14 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+          <div className="space-y-2 text-center md:text-left flex flex-col items-center md:items-start max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-semibold tracking-wide">
+              <Zap className="w-3.5 h-3.5 shrink-0" /> FAST TECH SUPPORT & CYBER
+              CARE
             </div>
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white tracking-tight">
               Facing Hardware or Online Service Issues?
             </h3>
-            <p className="text-neutral-400 text-xs sm:text-sm max-w-xl">
-              Walk into our shop in Barrackpore or reach out via WhatsApp for
+            <p className="text-neutral-400 text-xs sm:text-sm">
+              Walk into our counter in Madhyamgram or connect via WhatsApp for
               immediate assistance.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3 sm:gap-4 shrink-0">
+          <div className="flex flex-col sm:flex-row w-full md:w-auto gap-3 shrink-0">
             <a
               href="https://wa.me/918902709631"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-5 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-bold text-sm transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20"
             >
-              {/* Real WhatsApp Icon */}
+              {/* WhatsApp Icon */}
               <svg
                 className="w-4 h-4 fill-current shrink-0"
                 viewBox="0 0 24 24"
@@ -91,19 +65,19 @@ export default function Footer() {
             </a>
 
             <a
-              href="tel:+919088879219"
+              href="tel:+918902709631"
               className="w-full sm:w-auto px-5 py-3 rounded-xl bg-neutral-900 hover:bg-neutral-800 text-white text-sm font-semibold transition-all border border-neutral-700 hover:border-cyan-500/50 active:scale-95 flex items-center justify-center gap-2"
             >
-              <Phone className="w-4 h-4 text-cyan-400" />
-              <span>Call</span>
+              <Phone className="w-4 h-4 text-cyan-400 shrink-0" />
+              <span>Call Us</span>
             </a>
           </div>
         </div>
 
         {/* ================= মূল কলাম গ্রিড ================= */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 sm:pb-12 border-b border-neutral-800/80">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 pb-10 sm:pb-12 border-b border-neutral-800/80 w-full min-w-0">
           {/* ব্র্যান্ড ও সোশ্যাল আইকন */}
-          <div className="sm:col-span-2 lg:col-span-4 space-y-4 text-left">
+          <div className="sm:col-span-2 lg:col-span-4 space-y-4 text-left min-w-0">
             <Link
               href="/"
               className="text-2xl font-black text-white tracking-tight inline-block"
@@ -113,9 +87,10 @@ export default function Footer() {
                 TECH
               </span>
             </Link>
-            <p className="text-sm leading-relaxed max-w-sm text-neutral-400">
+            <p className="text-xs sm:text-sm leading-relaxed max-w-sm text-neutral-400">
               Your dependable hardware diagnosis clinic and complete cyber
-              service hub. High-speed SSD upgrades and dedicated client care.
+              service hub. High-speed SSD upgrades, form filling, and dedicated
+              client care.
             </p>
             <div className="flex gap-2.5 pt-1">
               {socials.map((s, idx) => {
@@ -127,7 +102,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.name}
-                    className="w-9 h-9 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-neutral-800/80 transition-all"
+                    className="w-9 h-9 rounded-lg bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-neutral-800/80 transition-all shrink-0"
                   >
                     <Icon className="w-4 h-4" />
                   </a>
@@ -137,15 +112,15 @@ export default function Footer() {
           </div>
 
           {/* সার্ভিসেস */}
-          <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-semibold uppercase text-white tracking-wider">
+          <div className="lg:col-span-3 space-y-3 min-w-0">
+            <h4 className="text-xs sm:text-sm font-semibold uppercase text-white tracking-wider">
               Services
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               {services.map((item, idx) => (
                 <li
                   key={idx}
-                  className="hover:text-cyan-400 transition-colors cursor-pointer"
+                  className="hover:text-cyan-400 transition-colors cursor-pointer truncate"
                 >
                   {item}
                 </li>
@@ -154,16 +129,16 @@ export default function Footer() {
           </div>
 
           {/* কোম্পানি লিংক */}
-          <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-sm font-semibold uppercase text-white tracking-wider">
+          <div className="lg:col-span-2 space-y-3 min-w-0">
+            <h4 className="text-xs sm:text-sm font-semibold uppercase text-white tracking-wider">
               Company
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs sm:text-sm">
               {companyLinks.map((item, idx) => (
                 <li key={idx}>
                   <Link
                     href={item.href}
-                    className="hover:text-cyan-400 transition-colors"
+                    className="hover:text-cyan-400 transition-colors block truncate"
                   >
                     {item.label}
                   </Link>
@@ -173,22 +148,28 @@ export default function Footer() {
           </div>
 
           {/* ঠিকানা ও যোগাযোগ */}
-          <div className="sm:col-span-2 lg:col-span-3 space-y-3">
-            <h4 className="text-sm font-semibold uppercase text-white tracking-wider">
+          <div className="sm:col-span-2 lg:col-span-3 space-y-3 min-w-0">
+            <h4 className="text-xs sm:text-sm font-semibold uppercase text-white tracking-wider">
               Shop Address
             </h4>
-            <div className="space-y-2.5 text-sm">
+            <div className="space-y-2.5 text-xs sm:text-sm">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-                <span>Madhyamgram, North 24 Parganas, WB, India</span>
+                <span className="leading-snug text-neutral-300 wrap-break-word">
+                  Netaji Nagar, Katakhal, Madhyamgram, Kolkata - 700132
+                </span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Clock className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>Mon - Sun: 10:00 AM - 10:00 PM</span>
+                <span className="text-neutral-300">
+                  Mon - Sun: 10:00 AM - 10:00 PM
+                </span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <Mail className="w-4 h-4 text-cyan-400 shrink-0" />
-                <span>growtechofficials4@gmail.com</span>
+                <span className="text-neutral-300 break-all text-[11px] sm:text-xs">
+                  growtechofficials4@gmail.com
+                </span>
               </div>
             </div>
           </div>
@@ -197,18 +178,13 @@ export default function Footer() {
         {/* ================= ফুটার বটম ================= */}
         <div className="pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-neutral-500 text-center md:text-left">
           <div className="flex items-center justify-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-green-400 shrink-0" />
-            <span>100% Genuine Components & Complete Data Privacy</span>
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs text-neutral-400">
+              100% Genuine Components & Complete Data Privacy
+            </span>
           </div>
 
-          {/* লগ-আউট বাটন ও অন্যান্য লিংক */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
-            <button
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 text-rose-400 hover:text-rose-300 font-semibold transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" /> Log Out
-            </button>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-[11px] sm:text-xs">
             <Link
               href="/privacy"
               className="hover:text-cyan-400 transition-colors"
@@ -221,7 +197,9 @@ export default function Footer() {
             >
               Terms of Service
             </Link>
-            <span>© {new Date().getFullYear()} Grow Tech.</span>
+            <span className="text-neutral-600">
+              © {new Date().getFullYear()} Grow Tech.
+            </span>
           </div>
         </div>
       </div>

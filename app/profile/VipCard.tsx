@@ -47,7 +47,7 @@ export default function VipCard({
       {/* 💳 Grow Tech Multi-Tone Tech Pass */}
       <div
         id="growtech-client-pass"
-        className="relative overflow-hidden rounded-[26px] bg-gradient-to-br from-[#070b19] via-[#0b152d] to-[#040814] border border-cyan-500/30 p-6 text-white shadow-2xl transition-all duration-300 hover:border-cyan-400/60"
+        className="relative overflow-hidden rounded-[26px] bg-linear-to-br from-[#070b19] via-[#0b152d] to-[#040814] border border-cyan-500/30 p-6 text-white shadow-2xl transition-all duration-300 hover:border-cyan-400/60"
       >
         {/* Dynamic Multi-Color Glows */}
         <div className="absolute -top-14 -right-14 w-48 h-48 bg-cyan-500/25 rounded-full blur-3xl pointer-events-none" />
@@ -55,7 +55,7 @@ export default function VipCard({
         <div className="absolute top-1/2 left-1/3 w-32 h-32 bg-indigo-500/15 rounded-full blur-2xl pointer-events-none" />
 
         {/* Ambient Top Light Beam */}
-        <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-linear-to-r from-transparent via-cyan-400 to-transparent" />
 
         {/* Card Header: Official Logo + Status Tag */}
         <div className="relative z-10 flex items-center justify-between pb-4 border-b border-white/10">
@@ -91,10 +91,10 @@ export default function VipCard({
 
         {/* Card Footer: Location & Verified UID */}
         <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-1.5 text-slate-300 truncate max-w-[200px]">
+          <div className="flex items-center gap-1.5 text-slate-300 truncate max-w-50">
             <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
             <span className="truncate text-[11px] font-medium text-slate-200">
-              {location ? location.split(",")[0] : "Barrackpore Hub"}
+              {location ? location.split(",")[0] : "Madhyamgram Hub"}
             </span>
           </div>
 
