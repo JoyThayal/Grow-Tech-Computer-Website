@@ -268,7 +268,7 @@ export default function ProfilePage() {
                           setStatus({
                             type: "success",
                             message:
-                              "Location detected successfully via GPS! 📍",
+                              "Location detected successfully via GPS!",
                           });
                         },
                         (msg) => setStatus({ type: "error", message: msg }),
