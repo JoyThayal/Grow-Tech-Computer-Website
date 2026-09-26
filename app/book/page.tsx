@@ -9,6 +9,7 @@ import AuthModal from "@/components/ui/AuthModal";
 import ServiceCategoryModal from "@/components/ui/ServiceCategoryModal";
 import BookingSummary from "@/app/book/BookingSummary";
 import BookingForm from "@/app/book/BookingForm";
+import BookingSuccessModal from "@/app/book//BookingSuccessModal";
 
 function BookingCanvas() {
   const params = useSearchParams();
@@ -20,10 +21,16 @@ function BookingCanvas() {
   const [submitting, setSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [location, setLocation] = useState("");
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
+  const [mapsLink, setMapsLink] = useState<string | null>(null);
   const [message, setMessage] = useState("");
 
   const service = params.get("service");
@@ -68,8 +75,16 @@ function BookingCanvas() {
       const user = session.user;
       setName(user.user_metadata?.full_name || user.user_metadata?.name || "");
       setEmail(user.email || "");
-      // প্রোফাইলে সেভ থাকা ফোন নম্বর অটো-ফিল হবে 📞✨
       setPhone(user.user_metadata?.phone || "");
+      setLocation(user.user_metadata?.location || "");
+
+      if (user.user_metadata?.latitude && user.user_metadata?.longitude) {
+        setCoords({
+          lat: user.user_metadata.latitude,
+          lng: user.user_metadata.longitude,
+        });
+      }
+      setMapsLink(user.user_metadata?.maps_link || null);
 
       if (!service || !category) {
         setShowCategoryModal(true);
@@ -94,12 +109,22 @@ function BookingCanvas() {
         data: { session },
       } = await supabase.auth.getSession();
 
+      const finalMapsLink = coords
+        ? `https://www.google.com/maps?q=${coords.lat},${coords.lng}`
+        : location.trim()
+          ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.trim())}`
+          : null;
+
       const { error } = await supabase.from("bookings").insert([
         {
           user_id: session?.user?.id || null,
           customer_name: name,
           email: email,
           phone: phone,
+          customer_location: location,
+          latitude: coords?.lat || null,
+          longitude: coords?.lng || null,
+          maps_link: finalMapsLink,
           service_category: category || (isCyberCafe ? "CyberCafe" : "Repair"),
           service_name: service,
           issue_task: issue,
@@ -114,8 +139,7 @@ function BookingCanvas() {
       if (error) {
         alert("Booking failed: " + error.message);
       } else {
-        alert("Slot booked successfully at Grow Tech Barrackpore! 🚀");
-        router.push("/");
+        setShowSuccessModal(true);
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
@@ -184,6 +208,12 @@ function BookingCanvas() {
           setName={setName}
           phone={phone}
           setPhone={setPhone}
+          location={location}
+          setLocation={(val) => {
+            setLocation(val);
+            setCoords(null);
+          }}
+          mapsLink={mapsLink}
           message={message}
           setMessage={setMessage}
           onSubmit={handleBookingSubmit}
@@ -201,6 +231,7 @@ function BookingCanvas() {
         </div>
       </footer>
 
+      {/* Modals */}
       <AuthModal
         isOpen={showLoginModal}
         onClose={() => router.push("/")}
@@ -209,6 +240,14 @@ function BookingCanvas() {
       />
 
       <ServiceCategoryModal isOpen={showCategoryModal} />
+
+      {/* আলাদা করা সাকসেস মডাল 🎯 */}
+      <BookingSuccessModal
+        isOpen={showSuccessModal}
+        serviceName={service || "Hardware & Cyber Service"}
+        assignedDay={assignedDay}
+        assignedSlot={assignedSlot}
+      />
     </div>
   );
 }
